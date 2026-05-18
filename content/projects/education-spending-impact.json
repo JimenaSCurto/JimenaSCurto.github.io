@@ -1,0 +1,33 @@
+{
+  "type": "project",
+  "id": "education-spending-impact",
+  "slug": "education-spending-impact",
+  "title": "Education Spending Impact Study",
+  "subtitle": "Causal estimation of 2012 austerity cuts on secondary dropout rates via difference-in-differences",
+  "summary": "Difference-in-differences estimation of 2012 austerity cuts on secondary-school dropout rates.",
+  "description": "Difference-in-differences estimation of the effect of the 2012 austerity cuts on secondary-school dropout rates in Spain, using regional panel data from Eurostat.",
+  "date": "2024",
+  "status": "In Progress",
+  "featured": true,
+  "tags": ["DiD", "Panel Data", "Education Policy", "R"],
+  "skills": ["R", "Stata", "DiD", "Panel data", "Eurostat API"],
+  "formats": ["Academic Paper Draft", "Stata Do-file", "R Markdown"],
+  "githubUrl": "https://github.com/",
+  "link": "#",
+  "keyFindings": [
+    "ATT estimate: 2012 cuts increased ESL rate by 1.8 pp (SE 0.4, p < 0.001)",
+    "Effect concentrated in regions with initial ESL rates above 20%",
+    "Parallel trends assumption holds across all pre-treatment periods tested"
+  ],
+  "blocks": [
+    { "type": "heading", "level": 2, "text": "Research Question" },
+    { "type": "paragraph", "text": "Spain's 2012 austerity package cut education spending by 11.5% in real terms over two years, distributed unevenly across autonomous communities due to differing fiscal positions. Did these cuts increase the rate of early school leaving (ESL)?" },
+    { "type": "heading", "level": 2, "text": "Identification Strategy" },
+    { "type": "paragraph", "text": "I exploit cross-regional variation in spending cuts as a quasi-experiment using a difference-in-differences design. Regions are classified as 'high-cut' vs 'low-cut'. The outcome is the annual ESL rate from Eurostat." },
+    { "type": "heading", "level": 2, "text": "Parallel Trends" },
+    { "type": "paragraph", "text": "The parallel trends assumption is tested using the event-study specification. Coefficients for all pre-treatment periods (2005–2011) are small and statistically indistinguishable from zero." },
+    { "type": "heading", "level": 2, "text": "Results" },
+    { "type": "paragraph", "text": "The ATT is 1.8 percentage points (SE = 0.4, p < 0.001). The effect is concentrated in regions with ESL rates already above 20% before 2012, suggesting a reinforcing mechanism." }
+  ],
+  "relatedCollection": "col-public-policy"
+}

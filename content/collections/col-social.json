@@ -1,0 +1,10 @@
+{
+  "type": "collection",
+  "id": "col-social",
+  "slug": "social-sciences-inequality",
+  "title": "Social Sciences & Inequality",
+  "description": "Data-driven exploration of migration, gender gaps, and socioeconomic stratification using survey and administrative microdata.",
+  "palette": "sienna",
+  "includedProjects": ["migration-flows-visualisation", "gender-pay-gap-decomposition"],
+  "ordering": 3
+}

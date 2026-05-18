@@ -1,0 +1,33 @@
+{
+  "type": "project",
+  "id": "voting-intention-survey",
+  "slug": "voting-intention-survey",
+  "title": "Voting Intention Survey Design",
+  "subtitle": "End-to-end stratified telephone survey (n = 1 200) for regional elections",
+  "summary": "End-to-end design of a stratified random-sample telephone survey for regional elections.",
+  "description": "End-to-end design of a stratified random-sample telephone survey for regional elections, including questionnaire design, weighting, and reporting.",
+  "date": "2024",
+  "status": "Complete",
+  "featured": false,
+  "tags": ["Survey Design", "Stata", "Weighting", "Fieldwork"],
+  "skills": ["Stata", "SPSS", "Survey methodology", "Rake weighting"],
+  "formats": ["Survey Dataset", "Methodology Report", "Topline Tables"],
+  "githubUrl": "https://github.com/",
+  "link": "#",
+  "keyFindings": [
+    "Achieved AAPOR response rate 3 of 22% after five contact attempts",
+    "Rake weighting on age x sex x province reduced design effect to 1.34",
+    "Final margin of error +/-2.8 pp at 95% confidence for provincial subgroups"
+  ],
+  "blocks": [
+    { "type": "heading", "level": 2, "text": "Project Overview" },
+    { "type": "paragraph", "text": "This project documents the full lifecycle of a telephone survey conducted for a regional election in Spain, from questionnaire design through fieldwork, weighting, and final reporting. It was carried out during my consultancy work at Gad3." },
+    { "type": "heading", "level": 2, "text": "Questionnaire Design" },
+    { "type": "paragraph", "text": "The questionnaire covered voting intention, party sympathy thermometers, top issue salience, leader evaluations, and sociodemographic items. Question order was randomised within blocks to reduce order effects. The instrument was piloted on 50 respondents before main fieldwork." },
+    { "type": "heading", "level": 2, "text": "Sampling & Fieldwork" },
+    { "type": "paragraph", "text": "A stratified random-digit-dialling sample was drawn, stratifying by province and municipality size. Fieldwork ran over 8 days with up to 5 contact attempts per number. The achieved sample (n = 1 200) had an AAPOR RR3 of 22%." },
+    { "type": "heading", "level": 2, "text": "Weighting" },
+    { "type": "paragraph", "text": "Rake weighting was applied on age group x sex x province using INE census marginals. The design effect was 1.34, implying an effective sample size of approximately 895." }
+  ],
+  "relatedCollection": "col-elections"
+}

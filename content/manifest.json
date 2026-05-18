@@ -1,0 +1,19 @@
+{
+  "noteworthy": [
+    "electoral-sentiment-mapping",
+    "municipal-budget-clustering",
+    "migration-flows-visualisation",
+    "gender-pay-gap-decomposition",
+    "education-spending-impact"
+  ],
+  "collectionsOrder": [
+    "col-elections",
+    "col-public-policy",
+    "col-social"
+  ],
+  "insightsOrder": [
+    "ins-001",
+    "ins-002",
+    "ins-003"
+  ]
+}

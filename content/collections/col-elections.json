@@ -1,0 +1,10 @@
+{
+  "type": "collection",
+  "id": "col-elections",
+  "slug": "electoral-political-analysis",
+  "title": "Electoral & Political Analysis",
+  "description": "Research combining survey methodology, social media analysis, and electoral modelling to study voting behaviour and political communication.",
+  "palette": "green",
+  "includedProjects": ["electoral-sentiment-mapping", "voting-intention-survey"],
+  "ordering": 1
+}

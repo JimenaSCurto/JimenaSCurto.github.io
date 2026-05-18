@@ -1,0 +1,20 @@
+{
+  "type": "insight",
+  "id": "ins-001",
+  "slug": "when-sentiment-scores-lie",
+  "title": "When Sentiment Scores Lie: Lessons from Analysing Political Twitter",
+  "category": "Methodology",
+  "date": "2024-03",
+  "readTime": "6 min",
+  "summary": "Pre-trained sentiment models trained on product reviews fail systematically on political discourse. Here is what I learned retraining on domain-specific data.",
+  "blocks": [
+    { "type": "paragraph", "text": "When I first applied a standard VADER sentiment analyser to a corpus of political tweets, the accuracy looked reasonable—until I checked the errors. The model consistently rated aggressive political rhetoric as neutral and labelled ironic criticism as positive." },
+    { "type": "heading", "level": 3, "text": "The domain mismatch problem" },
+    { "type": "paragraph", "text": "Most off-the-shelf sentiment models are trained on Amazon product reviews or IMDB ratings. Political discourse has a fundamentally different lexicon: words like <em>austeridad</em>, <em>recortes</em>, or a politician's surname carry strong valence that a product-review model has never seen in a polarised context." },
+    { "type": "heading", "level": 3, "text": "What I did instead" },
+    { "type": "paragraph", "text": "I fine-tuned a multilingual BERT model on 4 000 manually annotated political tweets. The fine-tuned model improved macro-F1 from 0.48 to 0.81 on the held-out test set." },
+    { "type": "heading", "level": 3, "text": "Key takeaway" },
+    { "type": "paragraph", "text": "Domain adaptation matters more than model size. A fine-tuned BERT-base outperformed GPT-3.5 zero-shot on this task by 12 percentage points, at a fraction of the cost." }
+  ],
+  "relatedProjects": ["electoral-sentiment-mapping"]
+}

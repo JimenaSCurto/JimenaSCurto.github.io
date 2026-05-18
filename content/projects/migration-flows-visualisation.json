@@ -1,0 +1,33 @@
+{
+  "type": "project",
+  "id": "migration-flows-visualisation",
+  "slug": "migration-flows-visualisation",
+  "title": "Migration Flows Visualisation",
+  "subtitle": "Interactive Sankey and chord diagrams for intra-EU migration corridors 2010–2023",
+  "summary": "Interactive Sankey diagrams for intra-EU migration 2010–2023 using D3.js.",
+  "description": "Interactive Sankey and chord diagrams for intra-EU migration 2010–2023 using D3.js, sourced from Eurostat microdata. Highlights corridor concentration and net-flow asymmetries.",
+  "date": "2023",
+  "status": "Complete",
+  "featured": true,
+  "tags": ["D3.js", "Data Vis", "Migration", "JavaScript"],
+  "skills": ["D3.js", "JavaScript", "Python", "Eurostat API", "SVG"],
+  "formats": ["Interactive Dashboard", "Dataset", "Methodology Note"],
+  "githubUrl": "https://github.com/",
+  "link": "#",
+  "keyFindings": [
+    "Top 5 corridors account for 38% of all intra-EU migration flows",
+    "Net-flow asymmetries between Eastern and Western EU have widened since 2015",
+    "Romania→Germany corridor grew 210% between 2010 and 2023"
+  ],
+  "blocks": [
+    { "type": "heading", "level": 2, "text": "Project Brief" },
+    { "type": "paragraph", "text": "Intra-EU migration data exists and is relatively high quality — Eurostat covers all 27 member states — but it is poorly communicated. The goal was to turn a dense migration matrix into something a policy audience could actually read and explore." },
+    { "type": "heading", "level": 2, "text": "Data Pipeline" },
+    { "type": "paragraph", "text": "Data was downloaded via the Eurostat REST API (table <code>migr_imm8</code>) for 2010–2023, covering immigration flows between all EU27 country pairs. Python (pandas) was used to reshape the raw JSON into an origin-destination matrix for each year." },
+    { "type": "heading", "level": 2, "text": "Visualisation Design" },
+    { "type": "paragraph", "text": "Two views were built in D3.js. The Sankey diagram shows annual net flows for the top 20 corridors. The chord diagram shows the full bilateral matrix for a selected year. Both charts animate on year change." },
+    { "type": "heading", "level": 2, "text": "Key Findings" },
+    { "type": "paragraph", "text": "The top five corridors account for 38% of all intra-EU migration — a high concentration that has increased since 2015. The Romania→Germany corridor grew 210% in volume between 2010 and 2023." }
+  ],
+  "relatedCollection": "col-social"
+}

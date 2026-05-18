@@ -1,0 +1,10 @@
+{
+  "type": "collection",
+  "id": "col-public-policy",
+  "slug": "public-policy-governance",
+  "title": "Public Policy & Governance",
+  "description": "Quantitative evaluation of public policies, budget allocation, and institutional performance using administrative data.",
+  "palette": "teal",
+  "includedProjects": ["municipal-budget-clustering", "education-spending-impact"],
+  "ordering": 2
+}

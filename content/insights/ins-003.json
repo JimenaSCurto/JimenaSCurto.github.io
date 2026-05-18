@@ -1,0 +1,20 @@
+{
+  "type": "insight",
+  "id": "ins-003",
+  "slug": "three-things-first-survey",
+  "title": "Three Things I Would Do Differently in My First Survey",
+  "category": "Fieldwork",
+  "date": "2024-09",
+  "readTime": "5 min",
+  "summary": "A candid post-mortem on a 1 200-respondent telephone survey: what broke, what we fixed mid-field, and what I would change from the start.",
+  "blocks": [
+    { "type": "paragraph", "text": "Running a large telephone survey for the first time surfaces problems that no methodology textbook prepares you for." },
+    { "type": "heading", "level": 3, "text": "1. Underestimating the incidence rate" },
+    { "type": "paragraph", "text": "We modelled a 20% incidence rate. The real rate was 12%, blowing the fieldwork budget and forcing a quota adjustment that introduced comparability issues." },
+    { "type": "heading", "level": 3, "text": "2. Ambiguous filter questions" },
+    { "type": "paragraph", "text": "A filter question was interpreted inconsistently by interviewers. We caught the discrepancy on day three and retrained, but 180 interviews were flagged and reweighted." },
+    { "type": "heading", "level": 3, "text": "3. Not piloting the weighting scheme" },
+    { "type": "paragraph", "text": "Two weighting cells were empty in the achieved sample, requiring ex-post cell collapsing that reduced precision for those groups." }
+  ],
+  "relatedProjects": ["voting-intention-survey"]
+}

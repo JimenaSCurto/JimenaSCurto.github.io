@@ -1,0 +1,16 @@
+{
+  "type": "insight",
+  "id": "ins-002",
+  "slug": "hidden-assumption-municipal-clustering",
+  "title": "The Hidden Assumption in Municipal Clustering Studies",
+  "category": "Methods",
+  "date": "2024-06",
+  "readTime": "4 min",
+  "summary": "Most fiscal clustering studies normalise by population, inadvertently encoding size as a clustering dimension. Here is a reproducible fix.",
+  "blocks": [
+    { "type": "paragraph", "text": "A common step when clustering municipal budgets is to express all expenditure items per capita. The intuition is sound, but per-capita normalisation introduces a subtle problem: it encodes population size as a latent feature." },
+    { "type": "heading", "level": 3, "text": "The reproducible fix" },
+    { "type": "paragraph", "text": "I used compositional normalisation instead: expressing each budget line as a share of total expenditure. Silhouette scores improved from 0.31 to 0.47, and the instability index fell by 40%." }
+  ],
+  "relatedProjects": ["municipal-budget-clustering"]
+}
