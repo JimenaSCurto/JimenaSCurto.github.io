@@ -60,6 +60,15 @@ function listContent(type) {
     });
 }
 
+function autoBuild() {
+  try {
+    execSync('node build/build.js', { cwd: ROOT, encoding: 'utf-8', stdio: 'pipe' });
+    console.log('  [auto-build] data/content.js regenerated');
+  } catch (e) {
+    console.error('  [auto-build] FAILED:', (e.stderr || e.message).trim());
+  }
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
   const pathname = url.pathname;
@@ -103,6 +112,7 @@ const server = http.createServer(async (req, res) => {
         fs.mkdirSync(dir, { recursive: true });
         const data = await readBody(req);
         fs.writeFileSync(path.join(dir, filename), JSON.stringify(data, null, 2), 'utf-8');
+        autoBuild();
         return sendJSON(res, 200, { ok: true, filename });
       }
 
@@ -113,6 +123,7 @@ const server = http.createServer(async (req, res) => {
         const type = parts.pop();
         const filePath = path.join(CONTENT_DIR, type, filename);
         if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+        autoBuild();
         return sendJSON(res, 200, { ok: true });
       }
 
@@ -125,6 +136,7 @@ const server = http.createServer(async (req, res) => {
       if (req.method === 'PUT' && pathname === '/api/hero') {
         const data = await readBody(req);
         fs.writeFileSync(path.join(CONTENT_DIR, 'hero.json'), JSON.stringify(data, null, 2), 'utf-8');
+        autoBuild();
         return sendJSON(res, 200, { ok: true });
       }
 
@@ -137,6 +149,7 @@ const server = http.createServer(async (req, res) => {
       if (req.method === 'PUT' && pathname === '/api/skills') {
         const data = await readBody(req);
         fs.writeFileSync(path.join(CONTENT_DIR, 'skills.json'), JSON.stringify(data, null, 2), 'utf-8');
+        autoBuild();
         return sendJSON(res, 200, { ok: true });
       }
 
@@ -149,6 +162,7 @@ const server = http.createServer(async (req, res) => {
       if (req.method === 'PUT' && pathname === '/api/manifest') {
         const data = await readBody(req);
         fs.writeFileSync(path.join(CONTENT_DIR, 'manifest.json'), JSON.stringify(data, null, 2), 'utf-8');
+        autoBuild();
         return sendJSON(res, 200, { ok: true });
       }
 
