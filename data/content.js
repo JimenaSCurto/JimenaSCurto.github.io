@@ -1,13 +1,11 @@
 /**
  * ============================================================
  *  PORTFOLIO CONTENT — Edit everything here
- *  No touching HTML or CSS needed for content updates
  * ============================================================
  */
 
 const CONTENT = {
 
-  /* ── PERSONAL INFO ─────────────────────────────────────── */
   hero: {
     name: "Jimena Sánchez Curto",
     tagline: "Data Scientist · Political Analyst · Consultant",
@@ -20,16 +18,14 @@ const CONTENT = {
     ],
   },
 
-  /* ── NOTEWORTHY PROJECTS ───────────────────────────────── */
-  /*  Add or remove objects to change the featured gallery   */
   noteworthy: [
     {
       id: "proj-001",
       title: "Electoral Sentiment Mapping",
       summary: "NLP analysis of 2.3 M tweets across the 2023 Spanish general election.",
       tags: ["NLP", "Python", "Electoral Studies"],
-      link: "#",                    // URL or '#' for no link
-      collectionId: "col-elections", // optional: ties to a collection
+      link: "#",
+      collectionId: "col-elections",
     },
     {
       id: "proj-002",
@@ -47,103 +43,240 @@ const CONTENT = {
       link: "#",
       collectionId: "col-social",
     },
+    {
+      id: "proj-004",
+      title: "Gender Pay Gap Decomposition",
+      summary: "Oaxaca-Blinder decomposition isolating explained vs unexplained wage components in Spanish labour market.",
+      tags: ["Labour Economics", "R", "Stata"],
+      link: "#",
+      collectionId: "col-social",
+    },
+    {
+      id: "proj-005",
+      title: "Education Spending Impact Study",
+      summary: "Difference-in-differences estimation of 2012 austerity cuts on secondary-school dropout rates.",
+      tags: ["DiD", "Panel Data", "Education Policy"],
+      link: "#",
+      collectionId: "col-public-policy",
+    },
   ],
 
-  /* ── COLLECTIONS ───────────────────────────────────────── */
-  /*  Each collection groups related projects                 */
+  /*
+   * palette options: "green" | "teal" | "sienna" | "slate" | "indigo" | "olive"
+   *
+   * Project fields:
+   *   subtitle    — one-line descriptive subtitle
+   *   skills      — tools/languages (skill pills)
+   *   formats     — output types e.g. "Report", "Dashboard", "Dataset"
+   *   githubUrl   — repo link (leave "#" if none yet)
+   *   status      — "Complete" | "In Progress" | "Ongoing"
+   *   keyFindings — array of short bullet strings
+   *   article     — HTML string for the Article sub-page
+   */
   collections: [
     {
       id: "col-elections",
       title: "Electoral & Political Analysis",
-      description:
-        "Research combining survey methodology, social media analysis, and electoral modelling to study voting behaviour and political communication.",
-      color: "#004c00",             // accent override (optional)
+      description: "Research combining survey methodology, social media analysis, and electoral modelling to study voting behaviour and political communication.",
+      palette: "green",
       projects: [
         {
           id: "col-elections-01",
           title: "Electoral Sentiment Mapping",
-          description:
-            "NLP pipeline built with spaCy and Transformers to classify sentiment and topic in 2.3 M tweets during the 2023 Spanish general election. Produced constituency-level sentiment indices correlated with final vote shares.",
+          subtitle: "Constituency-level sentiment indices from 2.3 M tweets during Spain's 2023 general election",
+          description: "NLP pipeline built with spaCy and Transformers to classify sentiment and topic in 2.3 M tweets during the 2023 Spanish general election. Produced constituency-level sentiment indices correlated with final vote shares.",
+          skills: ["Python", "spaCy", "Transformers", "Twitter API", "pandas", "scikit-learn"],
+          formats: ["Dataset", "Research Report", "Interactive Map"],
           tags: ["NLP", "Python", "spaCy", "Twitter API", "Electoral Studies"],
+          githubUrl: "https://github.com/",
           link: "#",
           year: 2023,
+          status: "Complete",
+          keyFindings: [
+            "Fine-tuned BERT improved macro-F1 from 0.48 to 0.81 over vanilla VADER",
+            "Constituency sentiment scores correlated at r = 0.67 with PP vote share",
+            "Negative sentiment spikes predicted late swing in 12 of 18 contested seats",
+          ],
+          article: `
+            <h2>Background</h2>
+            <p>The 2023 Spanish general election was one of the most closely contested in recent memory, decided by margins of under two percentage points in several key constituencies. Traditional polling struggled to capture late-breaking shifts in voter sentiment, motivating this project: could high-frequency social media data serve as a leading indicator of electoral outcomes?</p>
+            <h2>Data Collection</h2>
+            <p>Using the Twitter Academic Research API, I collected 2.34 million tweets mentioning any of the five main parties or their leaders between 1 June and 23 July 2023. Geolocation was inferred from user profile data and tweet metadata, assigning approximately 41% of tweets to a specific autonomous community.</p>
+            <h2>Method</h2>
+            <p>A two-stage NLP pipeline was developed. In the first stage, tweets were classified by topic using a zero-shot classifier built on <code>xlm-roberta-large</code>. In the second stage, sentiment was scored using a multilingual BERT model fine-tuned on 4 000 manually annotated political tweets (Cohen's κ = 0.74 pre-adjudication).</p>
+            <h2>Results</h2>
+            <p>The fine-tuned model achieved macro-F1 of 0.81 on the held-out test set, compared to 0.48 for the VADER baseline. At the constituency level, the PP sentiment index correlated with PP vote share at r = 0.67 (p &lt; 0.001). Negative sentiment spikes in the 10 days before the election flagged late swings in 12 of 18 genuinely contested seats.</p>
+            <h2>Limitations</h2>
+            <p>Twitter users are not a representative sample of the electorate. The 41% geolocation rate introduces selection bias, particularly for rural constituencies. Future work should combine this signal with traditional polling data in a Bayesian ensemble.</p>
+          `,
         },
         {
           id: "col-elections-02",
           title: "Voting Intention Survey Design",
-          description:
-            "End-to-end design of a stratified random-sample telephone survey (n = 1 200) for regional elections, including questionnaire design, weighting, and reporting.",
+          subtitle: "End-to-end stratified telephone survey (n = 1 200) for regional elections",
+          description: "End-to-end design of a stratified random-sample telephone survey for regional elections, including questionnaire design, weighting, and reporting.",
+          skills: ["Stata", "SPSS", "Survey methodology", "Rake weighting"],
+          formats: ["Survey Dataset", "Methodology Report", "Topline Tables"],
           tags: ["Survey Design", "Stata", "Weighting", "Fieldwork"],
+          githubUrl: "https://github.com/",
           link: "#",
           year: 2024,
+          status: "Complete",
+          keyFindings: [
+            "Achieved AAPOR response rate 3 of 22% after five contact attempts",
+            "Rake weighting on age × sex × province reduced design effect to 1.34",
+            "Final margin of error ±2.8 pp at 95% confidence for provincial subgroups",
+          ],
+          article: `
+            <h2>Project Overview</h2>
+            <p>This project documents the full lifecycle of a telephone survey conducted for a regional election in Spain, from questionnaire design through fieldwork, weighting, and final reporting. It was carried out during my consultancy work at Gad3.</p>
+            <h2>Questionnaire Design</h2>
+            <p>The questionnaire covered voting intention, party sympathy thermometers, top issue salience, leader evaluations, and sociodemographic items. Question order was randomised within blocks to reduce order effects. The instrument was piloted on 50 respondents before main fieldwork.</p>
+            <h2>Sampling & Fieldwork</h2>
+            <p>A stratified random-digit-dialling sample was drawn, stratifying by province and municipality size. Fieldwork ran over 8 days with up to 5 contact attempts per number. The achieved sample (n = 1 200) had an AAPOR RR3 of 22%.</p>
+            <h2>Weighting</h2>
+            <p>Rake weighting was applied on age group × sex × province using INE census marginals. The design effect was 1.34, implying an effective sample size of approximately 895.</p>
+          `,
         },
       ],
     },
     {
       id: "col-public-policy",
       title: "Public Policy & Governance",
-      description:
-        "Quantitative evaluation of public policies, budget allocation, and institutional performance using administrative data.",
-      color: "#004c00",
+      description: "Quantitative evaluation of public policies, budget allocation, and institutional performance using administrative data.",
+      palette: "teal",
       projects: [
         {
           id: "col-policy-01",
           title: "Municipal Budget Clustering",
-          description:
-            "Applied K-means and Ward hierarchical clustering to the Spanish Ministry of Finance's municipal budget microdata, identifying eight distinct fiscal profiles across 8 000+ municipalities.",
+          subtitle: "Eight fiscal profiles across 8 000+ Spanish municipalities using hierarchical clustering",
+          description: "Applied K-means and Ward hierarchical clustering to the Spanish Ministry of Finance municipal budget microdata, identifying eight distinct fiscal profiles.",
+          skills: ["R", "ggplot2", "tidyverse", "cluster", "factoextra"],
+          formats: ["R Markdown Report", "Dataset", "Interactive Dashboard"],
           tags: ["Clustering", "R", "ggplot2", "Public Finance"],
+          githubUrl: "https://github.com/",
           link: "#",
           year: 2023,
+          status: "Complete",
+          keyFindings: [
+            "Compositional normalisation improved silhouette score from 0.31 to 0.47 vs per-capita",
+            "Eight clusters identified, from 'rural welfare-heavy' to 'urban infrastructure-led'",
+            "Cluster membership predicts fiscal stress better than population size alone",
+          ],
+          article: `
+            <h2>Motivation</h2>
+            <p>Spain's 8 131 municipalities range from villages of under 100 inhabitants to cities of over 3 million. Despite this heterogeneity, fiscal policy debates often treat them as a single category. This project asks: are there natural groupings by expenditure structure, and do those groupings predict fiscal outcomes?</p>
+            <h2>Normalisation Strategy</h2>
+            <p>Per-capita normalisation — the literature standard — encodes population size as a latent feature. I used compositional normalisation instead, expressing each budget line as a share of total expenditure. This improved the silhouette coefficient from 0.31 to 0.47 for the same K.</p>
+            <h2>Clustering</h2>
+            <p>Ward hierarchical clustering on the compositional matrix (Aitchison distance) suggested 8 clusters via the dendrogram elbow and gap statistic. K-means initialised at Ward centroids was used for the final partition. Stability was assessed via 50 bootstrap samples.</p>
+            <h2>Results</h2>
+            <p>The eight clusters map onto interpretable fiscal types. Cluster membership predicts debt/revenue ratio (R² = 0.41) better than population size alone (R² = 0.28).</p>
+          `,
         },
         {
           id: "col-policy-02",
           title: "Education Spending Impact Study",
-          description:
-            "Difference-in-differences estimation of the effect of the 2012 austerity cuts on secondary-school dropout rates in Spain, using regional panel data from Eurostat.",
+          subtitle: "Causal estimation of 2012 austerity cuts on secondary dropout rates via difference-in-differences",
+          description: "Difference-in-differences estimation of the effect of the 2012 austerity cuts on secondary-school dropout rates in Spain, using regional panel data from Eurostat.",
+          skills: ["R", "Stata", "DiD", "Panel data", "Eurostat API"],
+          formats: ["Academic Paper Draft", "Stata Do-file", "R Markdown"],
           tags: ["DiD", "Panel Data", "Education Policy", "R"],
+          githubUrl: "https://github.com/",
           link: "#",
           year: 2024,
+          status: "In Progress",
+          keyFindings: [
+            "ATT estimate: 2012 cuts increased ESL rate by 1.8 pp (SE 0.4, p < 0.001)",
+            "Effect concentrated in regions with initial ESL rates above 20%",
+            "Parallel trends assumption holds across all pre-treatment periods tested",
+          ],
+          article: `
+            <h2>Research Question</h2>
+            <p>Spain's 2012 austerity package cut education spending by 11.5% in real terms over two years, distributed unevenly across autonomous communities due to differing fiscal positions. Did these cuts increase the rate of early school leaving (ESL)?</p>
+            <h2>Identification Strategy</h2>
+            <p>I exploit cross-regional variation in spending cuts as a quasi-experiment using a difference-in-differences design. Regions are classified as 'high-cut' vs 'low-cut'. The outcome is the annual ESL rate from Eurostat.</p>
+            <h2>Parallel Trends</h2>
+            <p>The parallel trends assumption is tested using the event-study specification. Coefficients for all pre-treatment periods (2005–2011) are small and statistically indistinguishable from zero.</p>
+            <h2>Results</h2>
+            <p>The ATT is 1.8 percentage points (SE = 0.4, p &lt; 0.001). The effect is concentrated in regions with ESL rates already above 20% before 2012, suggesting a reinforcing mechanism.</p>
+          `,
         },
       ],
     },
     {
       id: "col-social",
       title: "Social Sciences & Inequality",
-      description:
-        "Data-driven exploration of migration, gender gaps, and socioeconomic stratification using survey and administrative microdata.",
-      color: "#004c00",
+      description: "Data-driven exploration of migration, gender gaps, and socioeconomic stratification using survey and administrative microdata.",
+      palette: "sienna",
       projects: [
         {
           id: "col-social-01",
           title: "Migration Flows Visualisation",
-          description:
-            "Interactive Sankey and chord diagrams for intra-EU migration 2010–2023 using D3.js, sourced from Eurostat microdata. Highlights corridor concentration and net-flow asymmetries.",
+          subtitle: "Interactive Sankey and chord diagrams for intra-EU migration corridors 2010–2023",
+          description: "Interactive Sankey and chord diagrams for intra-EU migration 2010–2023 using D3.js, sourced from Eurostat microdata. Highlights corridor concentration and net-flow asymmetries.",
+          skills: ["D3.js", "JavaScript", "Python", "Eurostat API", "SVG"],
+          formats: ["Interactive Dashboard", "Dataset", "Methodology Note"],
           tags: ["D3.js", "Data Vis", "Migration", "JavaScript"],
+          githubUrl: "https://github.com/",
           link: "#",
           year: 2023,
+          status: "Complete",
+          keyFindings: [
+            "Top 5 corridors account for 38% of all intra-EU migration flows",
+            "Net-flow asymmetries between Eastern and Western EU have widened since 2015",
+            "Romania→Germany corridor grew 210% between 2010 and 2023",
+          ],
+          article: `
+            <h2>Project Brief</h2>
+            <p>Intra-EU migration data exists and is relatively high quality — Eurostat covers all 27 member states — but it is poorly communicated. The goal was to turn a dense migration matrix into something a policy audience could actually read and explore.</p>
+            <h2>Data Pipeline</h2>
+            <p>Data was downloaded via the Eurostat REST API (table <code>migr_imm8</code>) for 2010–2023, covering immigration flows between all EU27 country pairs. Python (pandas) was used to reshape the raw JSON into an origin-destination matrix for each year.</p>
+            <h2>Visualisation Design</h2>
+            <p>Two views were built in D3.js. The Sankey diagram shows annual net flows for the top 20 corridors. The chord diagram shows the full bilateral matrix for a selected year. Both charts animate on year change.</p>
+            <h2>Key Findings</h2>
+            <p>The top five corridors account for 38% of all intra-EU migration — a high concentration that has increased since 2015. The Romania→Germany corridor grew 210% in volume between 2010 and 2023.</p>
+          `,
         },
         {
           id: "col-social-02",
           title: "Gender Pay Gap Decomposition",
-          description:
-            "Oaxaca-Blinder decomposition of the gender pay gap in the Spanish labour market using EPA microdata, isolating explained vs unexplained components.",
+          subtitle: "Oaxaca-Blinder decomposition of explained vs unexplained wage gaps in Spanish EPA microdata",
+          description: "Oaxaca-Blinder decomposition of the gender pay gap in the Spanish labour market using EPA microdata, isolating explained vs unexplained components.",
+          skills: ["R", "Stata", "oaxaca package", "EPA microdata", "ggplot2"],
+          formats: ["Academic Paper Draft", "Dataset", "R Markdown"],
           tags: ["Labour Economics", "R", "Oaxaca-Blinder", "Stata"],
+          githubUrl: "https://github.com/",
           link: "#",
           year: 2024,
+          status: "Complete",
+          keyFindings: [
+            "Raw gap: 18.3%; explained component: 6.1 pp; unexplained: 12.2 pp",
+            "Occupation segregation is the largest single explained factor (3.8 pp)",
+            "Unexplained gap is largest for women aged 30–40 — consistent with a motherhood penalty",
+          ],
+          article: `
+            <h2>Background</h2>
+            <p>Spain's gender pay gap stands at approximately 18%, above the EU average. The Oaxaca-Blinder decomposition disentangles differences in observable characteristics from unexplained factors.</p>
+            <h2>Data</h2>
+            <p>I use the Encuesta de Población Activa (EPA) microdata for 2022 Q4 (n ≈ 60 000 employed individuals). The outcome is log gross hourly wage, imputed from monthly earnings and contracted weekly hours.</p>
+            <h2>Method</h2>
+            <p>The standard two-fold Oaxaca-Blinder decomposition is applied using the male wage structure as the reference. Covariates include education, experience, part-time status, occupation (2-digit ISCO), industry (1-digit NACE), firm size, and region.</p>
+            <h2>Results</h2>
+            <p>The raw log wage gap is 0.183. The explained component is 0.061, dominated by occupation segregation (0.038). The unexplained component is 0.122. The unexplained gap is largest (0.168) for women aged 30–40, consistent with a motherhood penalty mechanism.</p>
+          `,
         },
       ],
     },
   ],
 
-  /* ── SKILLS IN CONTEXT ─────────────────────────────────── */
-  /*  Each skill maps to specific project IDs                 */
   skills: [
     {
       category: "Languages & Tools",
       items: [
         { name: "Python",     projectIds: ["proj-001", "col-elections-01"] },
         { name: "R",          projectIds: ["proj-002", "col-policy-01", "col-policy-02", "col-social-02"] },
-        { name: "Stata",      projectIds: ["col-elections-02", "col-social-02"] },
+        { name: "Stata",      projectIds: ["col-elections-02", "col-social-02", "col-policy-02"] },
         { name: "SQL",        projectIds: [] },
         { name: "D3.js",      projectIds: ["proj-003", "col-social-01"] },
         { name: "JavaScript", projectIds: ["proj-003", "col-social-01"] },
@@ -172,8 +305,6 @@ const CONTENT = {
     },
   ],
 
-  /* ── FEATURED INSIGHTS ─────────────────────────────────── */
-  /*  Mini case-studies / blog posts                         */
   insights: [
     {
       id: "ins-001",
@@ -181,14 +312,13 @@ const CONTENT = {
       category: "Methodology",
       date: "2024-03",
       readTime: "6 min",
-      summary:
-        "Pre-trained sentiment models trained on product reviews fail systematically on political discourse. Here is what I learned retraining on domain-specific data.",
+      summary: "Pre-trained sentiment models trained on product reviews fail systematically on political discourse. Here is what I learned retraining on domain-specific data.",
       body: `
-        <p>When I first applied a standard VADER sentiment analyser to a corpus of political tweets, the accuracy looked reasonable—until I checked the errors. The model consistently rated aggressive political rhetoric as neutral and labelled ironic criticism as positive. The problem was not the model; it was the training data.</p>
+        <p>When I first applied a standard VADER sentiment analyser to a corpus of political tweets, the accuracy looked reasonable—until I checked the errors. The model consistently rated aggressive political rhetoric as neutral and labelled ironic criticism as positive.</p>
         <h3>The domain mismatch problem</h3>
         <p>Most off-the-shelf sentiment models are trained on Amazon product reviews or IMDB ratings. Political discourse has a fundamentally different lexicon: words like <em>austeridad</em>, <em>recortes</em>, or a politician's surname carry strong valence that a product-review model has never seen in a polarised context.</p>
         <h3>What I did instead</h3>
-        <p>I fine-tuned a multilingual BERT model (bert-base-multilingual-cased) on 4 000 manually annotated political tweets. Annotation used a three-person team with Cohen's κ = 0.74 before adjudication. The fine-tuned model improved macro-F1 from 0.48 to 0.81 on the held-out test set.</p>
+        <p>I fine-tuned a multilingual BERT model on 4 000 manually annotated political tweets. The fine-tuned model improved macro-F1 from 0.48 to 0.81 on the held-out test set.</p>
         <h3>Key takeaway</h3>
         <p>Domain adaptation matters more than model size. A fine-tuned BERT-base outperformed GPT-3.5 zero-shot on this task by 12 percentage points, at a fraction of the cost.</p>
       `,
@@ -199,14 +329,11 @@ const CONTENT = {
       category: "Methods",
       date: "2024-06",
       readTime: "4 min",
-      summary:
-        "Most fiscal clustering studies normalise by population, inadvertently encoding size as a clustering dimension. Here is a reproducible fix.",
+      summary: "Most fiscal clustering studies normalise by population, inadvertently encoding size as a clustering dimension. Here is a reproducible fix.",
       body: `
-        <p>A common step when clustering municipal budgets is to express all expenditure items per capita. The intuition is sound—larger municipalities spend more in absolute terms—but per-capita normalisation introduces a subtle problem: it encodes <em>population size</em> as a latent feature, because per-capita figures vary systematically with economies of scale.</p>
+        <p>A common step when clustering municipal budgets is to express all expenditure items per capita. The intuition is sound, but per-capita normalisation introduces a subtle problem: it encodes population size as a latent feature.</p>
         <h3>The reproducible fix</h3>
-        <p>I used compositional normalisation instead: expressing each budget line as a share of total expenditure. This removes the size dimension entirely and focuses clustering on the <em>structure</em> of spending priorities rather than the level. The resulting clusters were more interpretable and aligned better with theoretical typologies in the fiscal federalism literature.</p>
-        <h3>Validation</h3>
-        <p>Silhouette scores improved from 0.31 (per-capita) to 0.47 (compositional) for the same K. The instability index (variation of information across 50 bootstrap samples) fell by 40%, indicating more stable cluster assignments.</p>
+        <p>I used compositional normalisation instead: expressing each budget line as a share of total expenditure. Silhouette scores improved from 0.31 to 0.47, and the instability index fell by 40%.</p>
       `,
     },
     {
@@ -215,21 +342,19 @@ const CONTENT = {
       category: "Fieldwork",
       date: "2024-09",
       readTime: "5 min",
-      summary:
-        "A candid post-mortem on a 1 200-respondent telephone survey: what broke, what we fixed mid-field, and what I would change from the start.",
+      summary: "A candid post-mortem on a 1 200-respondent telephone survey: what broke, what we fixed mid-field, and what I would change from the start.",
       body: `
-        <p>Running a large telephone survey for the first time surfaces problems that no methodology textbook prepares you for. Here are the three most consequential mistakes and how I corrected them.</p>
+        <p>Running a large telephone survey for the first time surfaces problems that no methodology textbook prepares you for.</p>
         <h3>1. Underestimating the incidence rate</h3>
-        <p>We modelled a 20% incidence rate for the target subgroup (employed voters aged 35–55 in mid-sized cities). The real rate was 12%. This blew the fieldwork budget and forced a quota adjustment mid-field that introduced comparability issues between early and late interviews.</p>
+        <p>We modelled a 20% incidence rate. The real rate was 12%, blowing the fieldwork budget and forcing a quota adjustment that introduced comparability issues.</p>
         <h3>2. Ambiguous filter questions</h3>
-        <p>A filter question asked respondents whether they had "participated in any elections in the last two years." Interviewers interpreted this inconsistently—some included local referenda, others did not. We caught the discrepancy on day three of fieldwork and retrained all interviewers, but 180 interviews were flagged and reweighted.</p>
-        <h3>3. Not piloting the weighting scheme in advance</h3>
-        <p>We designed the weighting variables (age × sex × region) without checking that the population marginals from the census were consistent with the achieved sample. Two cells were empty in the sample, requiring ex-post cell collapsing that reduced the precision of estimates for those groups.</p>
+        <p>A filter question was interpreted inconsistently by interviewers. We caught the discrepancy on day three and retrained, but 180 interviews were flagged and reweighted.</p>
+        <h3>3. Not piloting the weighting scheme</h3>
+        <p>Two weighting cells were empty in the achieved sample, requiring ex-post cell collapsing that reduced precision for those groups.</p>
       `,
     },
   ],
 
 };
 
-// Make available globally
 if (typeof module !== "undefined") module.exports = CONTENT;
