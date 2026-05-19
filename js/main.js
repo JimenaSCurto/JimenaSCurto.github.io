@@ -19,6 +19,8 @@ const ICONS = {
   folder: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`,
   fileText: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
   layers: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`,
+  chevronDown: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
+  download: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
 };
 
 /* ── Helpers ── */
@@ -48,6 +50,21 @@ function buildProjectIndex() {
   return idx;
 }
 
+/* ── COUNT-UP ANIMATION ── */
+function animateCountUp(el, target) {
+  const duration = 1200;
+  const start = performance.now();
+  const from = 0;
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(from + (target - from) * eased);
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
 /* ── NAV ── */
 function initNav() {
   const nav = qs('#nav');
@@ -72,23 +89,79 @@ function initNav() {
 /* ── HERO ── */
 function renderHero() {
   const h = CONTENT.hero;
-  // Name — italicise last word
   qs('.hero-name').innerHTML = h.name.replace(/(\S+)$/, '<em>$1</em>');
   qs('.hero-tagline').textContent = h.tagline;
   qs('.hero-description').textContent = h.description;
 
-  qs('.hero-links').innerHTML = h.links.map(l =>
+  // Links including CV download
+  const linksHTML = h.links.map(l =>
     `<a href="${l.url}" class="hero-link" target="_blank" rel="noopener">${ICONS[l.icon] || ''}${l.label}</a>`
   ).join('');
+  const cvLink = `<a href="cv.pdf" download class="hero-link hero-link-cv">${ICONS.download}Download CV</a>`;
+  qs('.hero-links').innerHTML = linksHTML + cvLink;
 
-  // Counts — computed automatically
-  const totalProjects =
-    (CONTENT.noteworthy?.length || 0) +
-    (CONTENT.collections?.reduce((a, c) => a + (c.projects?.length || 0), 0) || 0);
+  // Deduplicated project count — collect all unique IDs
+  const uniqueIds = new Set();
+  (CONTENT.noteworthy || []).forEach(p => uniqueIds.add(p.id));
+  (CONTENT.collections || []).forEach(col => {
+    (col.projects || []).forEach(p => uniqueIds.add(p.id));
+  });
+  const totalProjects = uniqueIds.size;
   const totalCollections = CONTENT.collections?.length || 0;
 
-  qs('#stat-projects').textContent    = totalProjects;
-  qs('#stat-collections').textContent = totalCollections;
+  const statProjects    = qs('#stat-projects');
+  const statCollections = qs('#stat-collections');
+  statProjects.textContent    = '0';
+  statCollections.textContent = '0';
+
+  // Count-up on scroll into view
+  const statCard = qs('.hero-stat-card');
+  if (statCard) {
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        animateCountUp(statProjects, totalProjects);
+        animateCountUp(statCollections, totalCollections);
+        observer.disconnect();
+      }
+    }, { threshold: 0.3 });
+    observer.observe(statCard);
+  }
+
+  // Render mini sparkline in hero visual
+  renderHeroSparkline();
+}
+
+/* ── HERO SPARKLINE ── */
+function renderHeroSparkline() {
+  const container = qs('#hero-sparkline');
+  if (!container) return;
+
+  // Simulated monthly sentiment data from the Electoral Sentiment Mapping project
+  const data = [32, 28, 35, 41, 38, 52, 48, 55, 63, 58, 72, 68, 75, 82, 78, 85, 71, 65, 88, 91];
+  const w = 240, h = 60;
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const range = max - min || 1;
+
+  const points = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((v - min) / range) * h;
+    return `${x},${y}`;
+  });
+
+  container.innerHTML = `
+    <svg viewBox="0 0 ${w} ${h}" class="hero-sparkline-svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--green-500)" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="var(--green-500)" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <polygon points="0,${h} ${points.join(' ')} ${w},${h}" fill="url(#sparkGrad)" class="sparkline-area"/>
+      <polyline points="${points.join(' ')}" fill="none" stroke="var(--green-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sparkline-line"/>
+    </svg>
+    <div class="hero-sparkline-label">Sentiment index · 2023 Election</div>
+  `;
 }
 
 /* ── NOTEWORTHY CAROUSEL ── */
@@ -99,9 +172,13 @@ function renderNoteworthy() {
   const dotsEl   = qs('#carousel-dots');
   if (!track) return;
 
+  const wrapper = qs('.carousel-wrapper');
+  wrapper?.setAttribute('aria-roledescription', 'carousel');
+  wrapper?.setAttribute('aria-label', 'Noteworthy projects');
+
   const cards = CONTENT.noteworthy;
-  track.innerHTML = cards.map(p => `
-    <article class="noteworthy-card" data-id="${p.id}">
+  track.innerHTML = cards.map((p, i) => `
+    <article class="noteworthy-card" data-id="${p.id}" tabindex="0" role="group" aria-roledescription="slide" aria-label="Slide ${i + 1} of ${cards.length}">
       <div class="noteworthy-card-accent"></div>
       <h3 class="noteworthy-card-title">${p.title}</h3>
       <p class="noteworthy-card-summary">${p.summary}</p>
@@ -120,11 +197,17 @@ function renderNoteworthy() {
   ).join('');
 
   let current = 0;
-  const CARD_W = 320 + 24; // card width + gap
+
+  function getCardWidth() {
+    const firstCard = qs('.noteworthy-card', track);
+    if (!firstCard) return 344;
+    return firstCard.getBoundingClientRect().width + 24;
+  }
 
   function goTo(idx) {
     current = Math.max(0, Math.min(idx, cards.length - 1));
-    track.style.transform = `translateX(-${current * CARD_W}px)`;
+    const cardW = getCardWidth();
+    track.style.transform = `translateX(-${current * cardW}px)`;
     qsa('.carousel-dot', dotsEl).forEach((d, i) => d.classList.toggle('active', i === current));
     prevBtn.disabled = current === 0;
     nextBtn.disabled = current === cards.length - 1;
@@ -133,6 +216,12 @@ function renderNoteworthy() {
   prevBtn.addEventListener('click', () => goTo(current - 1));
   nextBtn.addEventListener('click', () => goTo(current + 1));
   qsa('.carousel-dot', dotsEl).forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+
+  // Keyboard arrow-key support
+  wrapper?.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); }
+  });
 
   // Drag to scroll
   let startX = 0, isDragging = false;
@@ -165,6 +254,28 @@ function renderNoteworthy() {
   });
 }
 
+/* ── TIMELINE ── */
+function renderTimeline() {
+  const container = qs('#timeline-track');
+  if (!container) return;
+
+  const events = [
+    { year: '2021', label: 'IE University', detail: 'PPLE + DBA', type: 'education' },
+    { year: '2023', label: 'First Research', detail: 'Electoral Sentiment Mapping', type: 'project' },
+    { year: '2024', label: 'Gad3 Internship', detail: 'Data Consultant', type: 'work' },
+    { year: '2025', label: 'Present', detail: '5th year · Consultant', type: 'current' },
+  ];
+
+  container.innerHTML = events.map(ev => `
+    <div class="timeline-item ${ev.type === 'current' ? 'timeline-item-current' : ''}">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">${ev.year}</div>
+      <div class="timeline-label">${ev.label}</div>
+      <div class="timeline-detail">${ev.detail}</div>
+    </div>
+  `).join('');
+}
+
 /* ── COLLECTIONS ── */
 const PALETTE_MAP = {
   green:  'col-palette-green',
@@ -175,13 +286,28 @@ const PALETTE_MAP = {
   olive:  'col-palette-olive',
 };
 
+/* Collect all unique method tags across all collection projects */
+function getAllMethodTags() {
+  const tags = new Set();
+  (CONTENT.collections || []).forEach(col => {
+    (col.projects || []).forEach(p => {
+      (p.tags || []).forEach(t => tags.add(t));
+    });
+  });
+  return [...tags];
+}
+
 function renderCollections() {
   const grid = qs('#collections-grid');
   if (!grid) return;
 
+  // Tag filter bar
+  renderTagFilter();
+
   grid.innerHTML = CONTENT.collections.map(col => {
     const palette = PALETTE_MAP[col.palette] || 'col-palette-green';
     const allTags = [...new Set(col.projects.flatMap(p => p.tags))].slice(0, 3);
+    const tagline = allTags.slice(0, 3).join(' · ');
     return `
       <article class="collection-card ${palette} fade-up" data-id="${col.id}" role="button" tabindex="0">
         <div class="collection-card-stripe"></div>
@@ -191,6 +317,7 @@ function renderCollections() {
             ${ICONS.folder.replace('svg', 'svg width="10" height="10"')}
             ${col.projects.length} project${col.projects.length !== 1 ? 's' : ''}
           </div>
+          <div class="collection-card-tagline">${tagline}</div>
           <p class="collection-card-description">${col.description}</p>
           <div class="collection-card-footer">
             <div class="collection-card-topics">
@@ -209,7 +336,44 @@ function renderCollections() {
   });
 }
 
+/* ── TAG FILTER BAR ── */
+function renderTagFilter() {
+  const bar = qs('#tag-filter-bar');
+  if (!bar) return;
+
+  const allTags = getAllMethodTags();
+  bar.innerHTML = `<button class="tag-filter-btn active" data-tag="all">All</button>` +
+    allTags.map(t => `<button class="tag-filter-btn" data-tag="${t}">${t}</button>`).join('');
+
+  bar.addEventListener('click', e => {
+    const btn = e.target.closest('.tag-filter-btn');
+    if (!btn) return;
+    qsa('.tag-filter-btn', bar).forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterCollectionsByTag(btn.dataset.tag);
+  });
+}
+
+function filterCollectionsByTag(tag) {
+  const grid = qs('#collections-grid');
+  if (!grid) return;
+
+  qsa('.collection-card', grid).forEach(card => {
+    if (tag === 'all') {
+      card.style.display = '';
+      return;
+    }
+    const colId = card.dataset.id;
+    const col = CONTENT.collections.find(c => c.id === colId);
+    if (!col) return;
+    const hasTags = col.projects.some(p => (p.tags || []).includes(tag));
+    card.style.display = hasTags ? '' : 'none';
+  });
+}
+
 /* ── COLLECTION LIST MODAL ── */
+let _collectionModalFocusTrap = null;
+
 function openCollection(id) {
   const col = CONTENT.collections.find(c => c.id === id);
   if (!col) return;
@@ -232,7 +396,6 @@ function openCollection(id) {
     </div>
   `).join('');
 
-  // Click on project card → open project detail
   qsa('.modal-project-card', projList).forEach(card => {
     const open = () => {
       closeModal(qs('#collection-modal'));
@@ -242,12 +405,41 @@ function openCollection(id) {
     card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') open(); });
   });
 
-  qs('#collection-modal').classList.add('open');
+  const overlay = qs('#collection-modal');
+  overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+  trapFocus(overlay);
+}
+
+/* ── FOCUS TRAP ── */
+function trapFocus(modal) {
+  const focusable = modal.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"]), input, textarea, select');
+  if (focusable.length === 0) return;
+  const first = focusable[0];
+  const last  = focusable[focusable.length - 1];
+
+  function handler(e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }
+
+  modal._focusTrapHandler = handler;
+  modal.addEventListener('keydown', handler);
+  first.focus();
+}
+
+function releaseFocusTrap(modal) {
+  if (modal._focusTrapHandler) {
+    modal.removeEventListener('keydown', modal._focusTrapHandler);
+    delete modal._focusTrapHandler;
+  }
 }
 
 /* ── PROJECT DETAIL MODAL ── */
-// Build a flat map of all collection projects
 function getAllProjects() {
   const map = {};
   (CONTENT.collections || []).forEach(col => {
@@ -269,19 +461,16 @@ function openProject(id) {
 
   const modal = qs('#project-modal');
 
-  // Tab definitions
   const tabs = [
     { id: 'home',    label: 'Overview'  },
     { id: 'article', label: 'Article',  hidden: !p.article },
     { id: 'details', label: 'Details'   },
   ].filter(t => !t.hidden);
 
-  // Build nav
   qs('#project-modal-tabs').innerHTML = tabs.map((t, i) =>
     `<button class="project-tab${i === 0 ? ' active' : ''}" data-tab="${t.id}">${t.label}</button>`
   ).join('');
 
-  // Build panels
   qs('#project-modal-panels').innerHTML = tabs.map((t, i) => {
     let content = '';
     if (t.id === 'home') {
@@ -358,7 +547,6 @@ function openProject(id) {
     return `<div class="project-tab-panel${i === 0 ? ' active' : ''}" data-panel="${t.id}">${content}</div>`;
   }).join('');
 
-  // Tab switching
   qsa('.project-tab', modal).forEach(btn => {
     btn.addEventListener('click', () => {
       qsa('.project-tab', modal).forEach(b => b.classList.remove('active'));
@@ -370,6 +558,7 @@ function openProject(id) {
 
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
+  trapFocus(modal);
 }
 
 /* ── MODALS ── */
@@ -377,6 +566,7 @@ function closeModal(overlay) {
   if (!overlay) return;
   overlay.classList.remove('open');
   document.body.style.overflow = '';
+  releaseFocusTrap(overlay);
 }
 
 function initModals() {
@@ -401,6 +591,7 @@ function renderSkills() {
   const panels  = qs('#skills-panels');
   if (!sidebar || !panels) return;
   const projectIndex = buildProjectIndex();
+  const allProjects = getAllProjects();
 
   CONTENT.skills.forEach((cat, i) => {
     const btn = document.createElement('button');
@@ -416,13 +607,22 @@ function renderSkills() {
     cat.items.forEach(skill => {
       const wrapper = document.createElement('div');
 
+      const hasProjects = skill.projectIds.length > 0;
+      const isInProgress = !hasProjects;
+
       const item = document.createElement('div');
       item.className = 'skills-item';
       item.setAttribute('role', 'button');
       item.setAttribute('tabindex', '0');
+      item.setAttribute('aria-expanded', 'false');
       item.innerHTML = `
         <span class="skill-name">${skill.name}</span>
-        <span class="skill-count">${skill.projectIds.length} project${skill.projectIds.length !== 1 ? 's' : ''}</span>
+        <span class="skill-item-right">
+          ${isInProgress
+            ? `<span class="skill-in-progress">In progress</span>`
+            : `<span class="skill-count">${skill.projectIds.length} project${skill.projectIds.length !== 1 ? 's' : ''}</span>`}
+          ${hasProjects ? `<span class="skill-chevron">${ICONS.chevronDown}</span>` : ''}
+        </span>
       `;
 
       const list = document.createElement('div');
@@ -430,17 +630,21 @@ function renderSkills() {
       skill.projectIds.forEach(pid => {
         const pill = document.createElement('div');
         pill.className = 'skill-project-pill';
+        pill.setAttribute('role', 'button');
+        pill.setAttribute('tabindex', '0');
         pill.innerHTML = `${ICONS.dot} ${projectIndex[pid] || pid}`;
+        // Click opens project detail
+        const openProj = () => openProject(pid);
+        pill.addEventListener('click', openProj);
+        pill.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openProj(); });
         list.appendChild(pill);
       });
-      if (skill.projectIds.length === 0) {
-        const pill = document.createElement('div');
-        pill.className = 'skill-project-pill';
-        pill.textContent = 'No projects yet';
-        list.appendChild(pill);
-      }
 
-      const toggle = () => { if (skill.projectIds.length > 0) list.classList.toggle('open'); };
+      const toggle = () => {
+        if (!hasProjects) return;
+        const isOpen = list.classList.toggle('open');
+        item.setAttribute('aria-expanded', isOpen);
+      };
       item.addEventListener('click', toggle);
       item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') toggle(); });
 
@@ -494,9 +698,37 @@ function openInsight(id) {
   qs('#insight-modal-category').textContent = ins.category;
   qs('#insight-modal-meta').textContent     = `${formatDate(ins.date)} · ${ins.readTime} read`;
   qs('#insight-modal-title').textContent    = ins.title;
-  qs('#insight-modal-body').innerHTML       = ins.body;
-  qs('#insight-modal').classList.add('open');
+
+  // Reading progress bar + body
+  qs('#insight-modal-body').innerHTML = ins.body;
+
+  const modal = qs('#insight-modal');
+  modal.classList.add('open');
   document.body.style.overflow = 'hidden';
+  trapFocus(modal);
+
+  // Reading progress
+  const progressBar = qs('#insight-progress-bar');
+  const scrollable  = qs('#insight-modal-body');
+  if (progressBar && scrollable) {
+    progressBar.style.width = '0%';
+    scrollable.addEventListener('scroll', function onScroll() {
+      const scrollTop = scrollable.scrollTop;
+      const scrollHeight = scrollable.scrollHeight - scrollable.clientHeight;
+      const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      progressBar.style.width = `${Math.min(pct, 100)}%`;
+    });
+  }
+}
+
+/* ── FOOTER ── */
+function renderFooter() {
+  const socialContainer = qs('#footer-social');
+  if (!socialContainer || !CONTENT.hero?.links) return;
+
+  socialContainer.innerHTML = CONTENT.hero.links.map(l =>
+    `<a href="${l.url}" class="footer-social-link" target="_blank" rel="noopener" aria-label="${l.label}">${ICONS[l.icon] || ''}</a>`
+  ).join('');
 }
 
 /* ── SCROLL REVEAL ── */
@@ -514,10 +746,12 @@ function initScrollReveal() {
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded', () => {
   renderHero();
+  renderTimeline();
   renderNoteworthy();
   renderCollections();
   renderSkills();
   renderInsights();
+  renderFooter();
   initModals();
   initNav();
   qs('#footer-year').textContent = new Date().getFullYear();
