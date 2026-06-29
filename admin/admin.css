@@ -1,0 +1,158 @@
+/* Admin page — reuses the site's color/type tokens, adds editor-specific layout */
+
+.admin-body {
+  padding: 40px 56px 96px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.admin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(26, 22, 16, 0.1);
+}
+
+.admin-header h1 {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 34px;
+  margin: 0 0 8px;
+  color: #1a1610;
+}
+
+.admin-header p {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #6a5e50;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0;
+}
+
+.admin-header code {
+  background: rgba(184, 144, 42, 0.12);
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.admin-status {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: #b8902a;
+  letter-spacing: 0.05em;
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-card {
+  background: #ede7d8;
+  border: 1px solid rgba(26, 22, 16, 0.1);
+  padding: 18px 20px 22px;
+}
+
+.admin-card.dragging {
+  opacity: 0.4;
+}
+
+.admin-card-row.admin-card-handle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.drag-grip {
+  cursor: grab;
+  color: #8a7a6a;
+  font-size: 14px;
+  user-select: none;
+}
+
+.card-index {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: #8a7a6a;
+  letter-spacing: 0.12em;
+  flex: 1;
+}
+
+.remove-btn {
+  color: #a14b3a !important;
+}
+
+.admin-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px 16px;
+}
+
+.admin-card-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  color: #8a7a6a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-card-grid label.span-2 {
+  grid-column: span 2;
+}
+
+.admin-card-grid input,
+.admin-card-grid select,
+.admin-card-grid textarea {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: #1a1610;
+  background: #f6f1e8;
+  border: 1px solid rgba(26, 22, 16, 0.18);
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.admin-card-grid input:focus,
+.admin-card-grid select:focus,
+.admin-card-grid textarea:focus {
+  outline: 2px solid rgba(184, 144, 42, 0.5);
+  outline-offset: 1px;
+}
+
+.admin-preview {
+  margin-top: 14px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  color: #8a7a6a;
+  word-break: break-all;
+}
+
+@media (max-width: 720px) {
+  .admin-body {
+    padding: 28px 20px 64px;
+  }
+  .admin-header {
+    flex-direction: column;
+  }
+  .admin-card-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

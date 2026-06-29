@@ -1,0 +1,62 @@
+[
+  {
+    "num": "01",
+    "title": "Mapping the Rhetoric",
+    "desc": "NLP analysis of 10 years of Spanish parliamentary discourse.",
+    "cat": "nlp-politics",
+    "catLabel": "NLP · Politics",
+    "tags": "Python · spaCy · 2024",
+    "img": "images/placeholder.webp",
+    "alt": "Image coming soon"
+  },
+  {
+    "num": "02",
+    "title": "The Language of Power",
+    "desc": "Sentiment analysis of electoral campaign language across Europe.",
+    "cat": "nlp-politics",
+    "catLabel": "NLP · Politics",
+    "tags": "BERT · R · 2024",
+    "img": "images/placeholder.webp",
+    "alt": "Image coming soon"
+  },
+  {
+    "num": "03",
+    "title": "Data & the Canon",
+    "desc": "Gender representation in the Western literary tradition, computationally.",
+    "cat": "nlp-literature",
+    "catLabel": "NLP · Literature",
+    "tags": "R · NLP · 2023",
+    "img": "images/placeholder.webp",
+    "alt": "Image coming soon"
+  },
+  {
+    "num": "04",
+    "title": "Sentiment in Verse",
+    "desc": "Tracking emotional arcs across 500 years of English poetry.",
+    "cat": "nlp-literature",
+    "catLabel": "NLP · Literature",
+    "tags": "Python · NLTK · 2023",
+    "img": "images/placeholder.webp",
+    "alt": "Image coming soon"
+  },
+  {
+    "num": "05",
+    "title": "Electoral Maps Reimagined",
+    "desc": "Visualizing voting patterns beyond the left/right spectrum.",
+    "cat": "data-viz",
+    "catLabel": "Data Viz",
+    "tags": "D3.js · R · 2022",
+    "img": "images/placeholder.webp",
+    "alt": "Image coming soon"
+  },
+  {
+    "num": "06",
+    "title": "The Semantics of Memory",
+    "desc": "Diachronic NLP analysis of collective memory in press archives.",
+    "cat": "nlp-literature",
+    "catLabel": "NLP · Literature",
+    "tags": "Python · Gensim · 2022",
+    "img": "images/placeholder.webp",
+    "alt": "Image coming soon"
+  }
+]

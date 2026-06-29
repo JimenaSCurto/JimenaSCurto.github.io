@@ -1,166 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Content Editor — Portfolio</title>
-  <link rel="stylesheet" href="/admin/css/editor.css" />
+  <meta charset="utf-8">
+  <title>Admin — Edit Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="admin.css">
 </head>
-<body>
-  <div id="app">
-    <!-- Sidebar -->
-    <aside id="sidebar">
-      <div class="sidebar-header">
-        <h1 class="sidebar-logo">JSC<span>.</span> Editor</h1>
-      </div>
+<body class="admin-body">
 
-      <div class="sidebar-search">
-        <input type="text" id="search-input" placeholder="Search items..." />
-      </div>
-
-      <nav class="sidebar-nav">
-        <button class="sidebar-section-btn active" data-type="projects">
-          <span class="sidebar-icon">P</span> Projects
-          <span class="sidebar-count" id="count-projects">0</span>
-        </button>
-        <button class="sidebar-section-btn" data-type="collections">
-          <span class="sidebar-icon">C</span> Collections
-          <span class="sidebar-count" id="count-collections">0</span>
-        </button>
-        <button class="sidebar-section-btn" data-type="insights">
-          <span class="sidebar-icon">I</span> Insights
-          <span class="sidebar-count" id="count-insights">0</span>
-        </button>
-        <button class="sidebar-section-btn" data-type="hero">
-          <span class="sidebar-icon">H</span> Hero / Bio
-        </button>
-        <button class="sidebar-section-btn" data-type="skills">
-          <span class="sidebar-icon">S</span> Skills
-        </button>
-        <button class="sidebar-section-btn" data-type="manifest">
-          <span class="sidebar-icon">M</span> Manifest / Order
-        </button>
-      </nav>
-
-      <div id="item-list" class="sidebar-items"></div>
-
-      <div class="sidebar-actions">
-        <button id="btn-new" class="btn btn-primary">+ New Item</button>
-        <button id="btn-build" class="btn btn-accent">Build Site</button>
-      </div>
-    </aside>
-
-    <!-- Main editor area -->
-    <main id="main">
-      <!-- Error banner -->
-      <div id="error-banner" class="error-banner hidden"></div>
-
-      <!-- Empty state -->
-      <div id="empty-state" class="empty-state">
-        <div class="empty-state-icon">JSC</div>
-        <h2>Content Editor</h2>
-        <p>Select an item from the sidebar to edit, or create a new one.</p>
-      </div>
-
-      <!-- Editor form (hidden until item selected) -->
-      <div id="editor-panel" class="editor-panel hidden">
-        <div class="editor-header">
-          <div class="editor-header-left">
-            <span class="editor-type-badge" id="editor-type-badge"></span>
-            <h2 class="editor-title" id="editor-title">New Item</h2>
-          </div>
-          <div class="editor-header-actions">
-            <button id="btn-preview" class="btn btn-outline">Preview</button>
-            <button id="btn-save" class="btn btn-primary">Save</button>
-            <button id="btn-delete" class="btn btn-danger">Delete</button>
-          </div>
-        </div>
-
-        <!-- Validation summary -->
-        <div id="validation-summary" class="validation-summary hidden"></div>
-
-        <!-- Tab bar for editor sections -->
-        <div class="editor-tabs">
-          <button class="editor-tab active" data-tab="metadata">Metadata</button>
-          <button class="editor-tab" data-tab="content">Content / Blocks</button>
-          <button class="editor-tab" data-tab="preview">Preview</button>
-        </div>
-
-        <!-- Metadata tab -->
-        <div class="editor-tab-panel active" data-panel="metadata">
-          <div id="metadata-fields"></div>
-        </div>
-
-        <!-- Content/Blocks tab -->
-        <div class="editor-tab-panel" data-panel="content">
-          <div id="blocks-editor"></div>
-        </div>
-
-        <!-- Preview tab -->
-        <div class="editor-tab-panel" data-panel="preview">
-          <div class="preview-toolbar">
-            <button class="preview-mode-btn active" data-mode="desktop">Desktop</button>
-            <button class="preview-mode-btn" data-mode="mobile">Mobile</button>
-          </div>
-          <div id="preview-frame" class="preview-frame"></div>
-        </div>
-      </div>
-
-      <!-- Hero editor -->
-      <div id="hero-panel" class="editor-panel hidden">
-        <div class="editor-header">
-          <div class="editor-header-left">
-            <span class="editor-type-badge badge-hero">HERO</span>
-            <h2 class="editor-title">Hero / Bio Settings</h2>
-          </div>
-          <div class="editor-header-actions">
-            <button id="btn-save-hero" class="btn btn-primary">Save</button>
-          </div>
-        </div>
-        <div id="hero-fields" class="form-section"></div>
-      </div>
-
-      <!-- Skills editor -->
-      <div id="skills-panel" class="editor-panel hidden">
-        <div class="editor-header">
-          <div class="editor-header-left">
-            <span class="editor-type-badge badge-skills">SKILLS</span>
-            <h2 class="editor-title">Skills in Context</h2>
-          </div>
-          <div class="editor-header-actions">
-            <button id="btn-save-skills" class="btn btn-primary">Save</button>
-          </div>
-        </div>
-        <div id="skills-fields" class="form-section"></div>
-      </div>
-
-      <!-- Manifest editor -->
-      <div id="manifest-panel" class="editor-panel hidden">
-        <div class="editor-header">
-          <div class="editor-header-left">
-            <span class="editor-type-badge badge-manifest">MANIFEST</span>
-            <h2 class="editor-title">Manifest / Ordering</h2>
-          </div>
-          <div class="editor-header-actions">
-            <button id="btn-save-manifest" class="btn btn-primary">Save</button>
-          </div>
-        </div>
-        <div id="manifest-fields" class="form-section"></div>
-      </div>
-    </main>
-  </div>
-
-  <!-- Build output modal -->
-  <div id="build-modal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <div class="modal-box-header">
-        <h3>Build Output</h3>
-        <button class="modal-box-close" id="build-modal-close">&times;</button>
-      </div>
-      <pre id="build-output" class="build-output"></pre>
+  <header class="admin-header">
+    <div>
+      <h1>Edit Projects</h1>
+      <p>Local editor for <code>data/projects.json</code>. Nothing here is saved automatically — download the file when you're done and commit it to the repo.</p>
     </div>
+    <a class="btn-link" href="../index.html#work">← back to site</a>
+  </header>
+
+  <div class="admin-toolbar">
+    <button id="add-project" class="btn-primary" type="button">+ Add project</button>
+    <button id="load-file" class="btn-primary" type="button">Load projects.json…</button>
+    <input type="file" id="file-input" accept="application/json" hidden>
+    <button id="download-file" class="btn-primary" type="button">Download projects.json</button>
+    <span id="status" class="admin-status"></span>
   </div>
 
-  <script src="/admin/js/editor.js"></script>
+  <div id="admin-list" class="admin-list"></div>
+
+  <template id="card-template">
+    <div class="admin-card" draggable="true">
+      <div class="admin-card-row admin-card-handle">
+        <span class="drag-grip">⠿</span>
+        <span class="card-index"></span>
+        <button class="btn-link remove-btn" type="button">remove</button>
+      </div>
+      <div class="admin-card-grid">
+        <label>Number
+          <input type="text" data-field="num" placeholder="01">
+        </label>
+        <label>Category key
+          <select data-field="cat">
+            <option value="nlp-politics">nlp-politics</option>
+            <option value="nlp-literature">nlp-literature</option>
+            <option value="data-viz">data-viz</option>
+          </select>
+        </label>
+        <label>Category label
+          <input type="text" data-field="catLabel" placeholder="NLP · Politics">
+        </label>
+        <label>Tags
+          <input type="text" data-field="tags" placeholder="Python · spaCy · 2024">
+        </label>
+        <label class="span-2">Title
+          <input type="text" data-field="title" placeholder="Project title">
+        </label>
+        <label class="span-2">Description
+          <textarea data-field="desc" rows="2" placeholder="One-line description"></textarea>
+        </label>
+        <label>Image path
+          <input type="text" data-field="img" placeholder="images/example.webp">
+        </label>
+        <label>Image alt text
+          <input type="text" data-field="alt" placeholder="Describes the thumbnail">
+        </label>
+      </div>
+      <div class="admin-preview"></div>
+    </div>
+  </template>
+
+  <script src="admin.js"></script>
 </body>
 </html>
