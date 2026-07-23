@@ -10,30 +10,127 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 
-  <!-- Shared header styling — DO NOT restyle .site-nav / .project-nav here. -->
+  <!-- Shared header styling — do NOT restyle .site-nav / .project-nav here. -->
   <link rel="stylesheet" href="../css/header.css">
 
-  <!--
-    ┌─────────────────────────────────────────────────────────────┐
-    │  THIS PAGE IS A BLANK CANVAS.                                │
-    │  Design everything between #site-header and #project-nav     │
-    │  however you like — add a <style> block below, or link a     │
-    │  per-project stylesheet, e.g.:                               │
-    │    <link rel="stylesheet" href="03-lady-macbeth.css">              │
-    │  Nothing here has to match the other project pages.          │
-    └─────────────────────────────────────────────────────────────┘
-  -->
   <style>
-    /* Temporary placeholder look — replace with your own design. */
-    body { margin: 0; background: #f6f1e8; color: #1a1610;
-           font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-    .placeholder { max-width: 760px; margin: 0 auto; padding: 120px 24px; }
-    .placeholder .eyebrow { font-family: "JetBrains Mono", monospace;
-           font-size: 11px; letter-spacing: 0.14em; color: #b8902a;
-           text-transform: uppercase; }
-    .placeholder h1 { font-family: "Cormorant Garamond", serif;
-           font-weight: 400; font-size: 44px; line-height: 1.1; margin: 16px 0 0; }
-    .placeholder p { color: #8a7a6a; margin-top: 24px; line-height: 1.6; }
+    :root{
+      --parchment:#f6f1e8; --ink:#1a1610; --gold:#b8902a;
+      --muted:#8a7a6a; --line:rgba(26,22,16,.12);
+      --accent:#8a1c1c;                       /* Lady Macbeth blood-red */
+      --serif:"Cormorant Garamond",Georgia,serif;
+      --mono:"JetBrains Mono",ui-monospace,monospace;
+      --body:"Iowan Old Style",Georgia,"Times New Roman",serif;
+      --p1:#8B5CF6; --p2:#B4232B; --p3:#C98A1E; --p4:#6366F1; --p5:#6B7280;
+    }
+    body{margin:0;background:var(--parchment);color:var(--ink);
+      font-family:var(--body);line-height:1.7;font-size:18px;}
+    .project{max-width:800px;margin:0 auto;padding:0 24px 112px;}
+    .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+      text-transform:uppercase;color:var(--accent);}
+
+    /* Title strip */
+    .lm-head{padding:88px 0 40px;border-bottom:1px solid var(--line);margin-bottom:8px;}
+    .lm-head h1{font-family:var(--serif);font-weight:600;font-style:italic;
+      font-size:clamp(46px,8vw,84px);line-height:.98;margin:14px 0 0;letter-spacing:-.01em;}
+    .lm-head .quote{font-family:var(--serif);font-style:italic;font-weight:300;
+      font-size:clamp(20px,3vw,26px);color:#4a4034;margin:20px 0 0;}
+    .lm-meta{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted);
+      margin-top:24px;display:flex;gap:20px;flex-wrap:wrap;}
+
+    section{margin-top:72px;}
+    section > h2{font-family:var(--serif);font-weight:600;font-style:italic;
+      font-size:34px;margin:10px 0 18px;}
+    .project p{margin:18px 0;}
+    .lede{font-family:var(--serif);font-size:24px;font-weight:300;line-height:1.5;color:#3a332a;}
+    strong{font-weight:600;}
+    em{font-style:italic;}
+
+    /* Dual-register: plain-language aside + decode toggle */
+    .plain{border-left:2px solid var(--accent);padding:4px 0 4px 18px;color:#4a4034;
+      font-size:.95em;margin:18px 0;}
+    .plain b{font-family:var(--mono);font-size:10px;letter-spacing:.1em;font-weight:500;
+      text-transform:uppercase;color:var(--accent);display:block;margin-bottom:3px;}
+    .decode{margin:14px 0;font-size:.92em;}
+    .decode summary{cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+      color:var(--accent);list-style:none;}
+    .decode summary::before{content:"▸ ";}
+    .decode[open] summary::before{content:"▾ ";}
+    .decode[open] summary{margin-bottom:6px;}
+    .decode p{margin:6px 0 0;color:#4a4034;}
+
+    /* Method feature list */
+    .features{list-style:none;padding:0;margin:20px 0;display:grid;
+      grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
+    .features li{background:var(--parchment);padding:14px 16px;}
+    .features .k{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--accent);display:block;margin-bottom:3px;}
+    .features .v{font-size:.92em;color:#3a332a;}
+
+    /* Insight pop-up */
+    .insight{display:block;width:100%;text-align:left;cursor:pointer;font:inherit;
+      color:var(--ink);background:rgba(138,28,28,.06);border:1px solid rgba(138,28,28,.35);
+      border-left:3px solid var(--accent);padding:14px 18px;margin:22px 0;transition:background .15s;}
+    .insight:hover,.insight:focus-visible{background:rgba(138,28,28,.12);
+      outline:2px solid var(--accent);outline-offset:2px;}
+    .insight-tag{font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+      text-transform:uppercase;color:var(--accent);margin-right:10px;}
+    .insight-teaser{font-family:var(--serif);font-style:italic;font-size:22px;}
+    .insight-body{display:block;margin-top:10px;font-size:.95em;color:#3a332a;}
+    .insight-body strong{color:var(--accent);}
+    .insight .chev{float:right;color:var(--accent);font-family:var(--mono);font-size:15px;}
+
+    /* Hero interactive phase chart */
+    .phaseviz{margin:36px 0;background:#fbf8f1;border:1px solid var(--line);padding:24px;}
+    .phaseviz .bars{display:flex;align-items:flex-end;gap:14px;height:220px;padding:0 4px;}
+    .phaseviz .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;
+      justify-content:flex-end;height:100%;cursor:pointer;}
+    .phaseviz .bar{width:100%;border-radius:2px 2px 0 0;transition:opacity .15s;
+      opacity:.55;}
+    .phaseviz .bar-wrap:hover .bar,.phaseviz .bar-wrap.sel .bar{opacity:1;}
+    .phaseviz .bar-val{font-family:var(--mono);font-size:11px;color:var(--ink);
+      margin-bottom:6px;font-weight:500;}
+    .phaseviz .bar-lab{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
+      text-transform:uppercase;color:var(--muted);margin-top:8px;text-align:center;line-height:1.4;}
+    .phaseviz .bar-wrap.sel .bar-lab{color:var(--ink);}
+    .phaseviz .axis-note{font-family:var(--mono);font-size:10px;color:var(--muted);
+      letter-spacing:.05em;margin-bottom:14px;}
+    .phase-panel{margin-top:20px;border-top:1px solid var(--line);padding-top:18px;}
+    .phase-panel .pp-name{font-family:var(--serif);font-style:italic;font-size:26px;}
+    .phase-panel .pp-loc{font-family:var(--mono);font-size:11px;color:var(--muted);
+      letter-spacing:.06em;margin-top:2px;}
+    .phase-panel .pp-stats{display:flex;gap:28px;flex-wrap:wrap;margin:14px 0 8px;}
+    .phase-panel .stat .n{font-family:var(--serif);font-size:30px;line-height:1;}
+    .phase-panel .stat .l{font-family:var(--mono);font-size:9px;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--muted);margin-top:4px;}
+    .phase-panel .pp-note{font-size:.96em;color:#3a332a;margin:6px 0 0;}
+
+    /* Figures */
+    figure{margin:40px 0;}
+    figure .fig-media{background:#fff;border:1px solid var(--line);padding:14px;overflow-x:auto;}
+    figure img{display:block;width:100%;height:auto;}
+    figcaption{font-size:.9em;color:var(--muted);margin-top:10px;line-height:1.5;}
+    figcaption b{color:var(--ink);font-weight:600;}
+
+    h3.sub{font-family:var(--serif);font-style:italic;font-size:26px;margin:48px 0 6px;}
+
+    .synthesis{margin-top:64px;padding:32px 0 0;border-top:2px solid var(--accent);}
+    .synthesis p:first-of-type{font-family:var(--serif);font-size:24px;font-weight:300;
+      line-height:1.5;color:#2a251d;}
+
+    /* Reveal */
+    .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s;}
+    .reveal.in{opacity:1;transform:none;}
+    @media (prefers-reduced-motion:reduce){
+      .reveal{opacity:1;transform:none;transition:none;}
+      .phaseviz .bar{transition:none;}
+    }
+    @media (max-width:640px){
+      body{font-size:17px;}
+      .features{grid-template-columns:1fr;}
+      .phaseviz .bars{gap:8px;height:180px;}
+      .phaseviz .bar-lab{font-size:8px;}
+    }
   </style>
 </head>
 <body>
@@ -42,12 +139,263 @@
   <div id="site-header"></div>
 
   <!-- ▼▼▼ YOUR UNIQUE PROJECT DESIGN GOES HERE ▼▼▼ -->
-  <main class="placeholder">
-    <div class="eyebrow">Project · 03-lady-macbeth</div>
-    <h1>A Linguistic Analysis of Lady Macbeth</h1>
-    <p>This page is an empty stub. Replace this <code>&lt;main&gt;</code> with
-       the project write-up, images, and any layout you want — it can look
-       completely different from every other page.</p>
+  <main class="project">
+
+    <header class="lm-head">
+      <div class="eyebrow">NLP · Literature · Digital Humanities</div>
+      <h1>Unsex Me Here</h1>
+      <p class="quote">Does Lady Macbeth really “speak like a man” — and does her grammar
+        of command rise and fall with her power?</p>
+      <div class="lm-meta">
+        <span>PYTHON · spaCy · NLTK</span>
+        <span>CORPUS LINGUISTICS</span>
+        <span>2023</span>
+      </div>
+    </header>
+
+    <!-- ════════ ACT I — CONTEXT & OBJECTIVE ════════ -->
+    <section id="context" class="reveal">
+      <div class="eyebrow">01 · Context &amp; Objective</div>
+      <h2>The claim, taken seriously</h2>
+      <p class="lede">Critics have long said that Lady Macbeth “speaks like a man” — that
+        she borrows a masculine register of command to seize a power the play denies her.
+        It is a compelling line. It is also, as usually stated, untestable.</p>
+      <p>This project turns that literary intuition into an empirical question. If Lady
+        Macbeth’s authority is really encoded in <strong>how she speaks</strong>, then the
+        shifts in her power across the play should leave measurable fingerprints in her
+        language — above all in her use of <strong>imperatives</strong> (direct commands)
+        and other markers of interpersonal dominance.</p>
+      <p>The working hypothesis is deliberately simple: when Lady Macbeth is in control,
+        her language should turn <em>directive</em>, <em>agentive</em>, and
+        <em>command-oriented</em>; as her authority fractures, those features should
+        weaken. To test it, her dialogue is divided into five <strong>dramatic phases</strong>
+        that track her arc from summoning power to losing her mind — <em>Invocation,
+        Manipulation, Execution, Displacement,</em> and <em>Collapse</em>.</p>
+      <p>The interesting result, as we’ll see, is that the simple hypothesis is
+        <em>wrong in a revealing way</em>.</p>
+    </section>
+
+    <!-- ════════ ACT II — METHODOLOGY ════════ -->
+    <section id="methodology" class="reveal">
+      <div class="eyebrow">02 · Methodology</div>
+      <h2>How the play was measured</h2>
+
+      <p>The corpus is the full text of <em>Macbeth</em> (Project Gutenberg edition). Every
+        line of dialogue was extracted and tagged by <strong>speaker</strong>, <strong>act</strong>,
+        and <strong>scene</strong>, so that each of Lady Macbeth’s speeches could be located
+        precisely in the play’s structure and assigned to one of the five phases through a
+        rule-based mapping of act–scene boundaries.</p>
+      <p class="plain"><b>In plain terms</b> the play was turned into a tidy table — one row
+        per speech, labelled with who says it and where — so the computer can compare Lady
+        Macbeth’s language at the start of the play with her language at the end.</p>
+
+      <p>The central feature is the <strong>imperative</strong>: a clause that issues a
+        command (“<em>screw your courage to the sticking place</em>”). These were found with
+        a <strong>hybrid detector</strong> — part rule-based patterns, part syntactic
+        heuristics over the parse tree, with <strong>manual validation</strong> of the results.
+        Imperative use was recorded both as raw counts and, crucially, as a
+        <strong>rate per 100 words</strong>, so that a long speech and a short one can be
+        compared fairly.</p>
+      <p class="plain"><b>In plain terms</b> counting commands isn’t as easy as searching for
+        an exclamation mark — English hides them in word order and sentence structure. So the
+        method combines hand-written rules with the grammar the computer parses, then a human
+        checks the catches. And because a long speech naturally contains more of everything,
+        commands are measured as a <em>density</em> — how many per 100 words — not a raw tally.</p>
+
+      <details class="decode">
+        <summary>Why a rate “per 100 words” instead of a raw count?</summary>
+        <p>Raw counts confound two different things: how commanding someone is, and how much
+          they happen to talk. Normalising to a rate isolates intensity from volume — a
+          two-word order and a hundred-word oration can then be placed on the same scale.</p>
+      </details>
+
+      <p>Imperatives are only one signal. Each speech was also profiled across a battery of
+        features associated with dominance, certainty, and cognitive state:</p>
+
+      <ul class="features">
+        <li><span class="k">Modal verbs</span><span class="v">Obligation &amp; intention
+          (“must”, “shall”) vs possibility — assertiveness vs hedging.</span></li>
+        <li><span class="k">Lexical fields</span><span class="v">Violence, control, and care
+          vocabularies, counted as rates.</span></li>
+        <li><span class="k">2nd-person pronouns</span><span class="v">“You / thou” as a marker
+          of outward, other-directed control.</span></li>
+        <li><span class="k">1st-person singular</span><span class="v">“I / me” as a marker of
+          inward, self-focused cognition.</span></li>
+        <li><span class="k">Question type</span><span class="v">Rhetorical challenges vs
+          genuine inquiry, split by confrontational vocabulary.</span></li>
+        <li><span class="k">Clause &amp; speech length</span><span class="v">Proxies for
+          rhetorical coherence and cognitive organisation.</span></li>
+      </ul>
+
+      <p>Two more layers add nuance. <strong>Collocation analysis</strong> looks at the words
+        that cluster around her imperative verbs — is she commanding <em>violence</em>, or
+        commanding <em>washing</em>? And a <strong>keyword analysis</strong> using
+        <strong>log-likelihood</strong> surfaces the vocabulary that is statistically
+        distinctive of Lady Macbeth relative to comparison groups: <em>Macbeth</em> himself,
+        the play’s other women, and the whole-play baseline.</p>
+      <p class="plain"><b>In plain terms</b> log-likelihood is a way of asking “which words is
+        <em>she</em> unusually fond of, compared with everyone else?” — flagging vocabulary
+        that is characteristic rather than merely frequent.</p>
+
+      <p>A word on honesty of scale. Lady Macbeth speaks relatively little — the corpus is
+        <strong>small</strong>. So the analysis prioritises <strong>descriptive clarity</strong>
+        over statistical machinery. Inferential tests (Fisher’s exact, Mann–Whitney U,
+        permutation tests, Poisson regression) were run but treated as
+        <strong>exploratory</strong>: signposts, not proofs. With this few speeches, the
+        pattern in the numbers matters more than any single p-value.</p>
+      <details class="decode">
+        <summary>Why not lean on p-values here?</summary>
+        <p>Significance tests assume enough data to separate signal from noise. On a corpus
+          of a few dozen speeches, they are unstable and easy to over-read. Reporting the
+          shape of the evidence — and being explicit about its limits — is the more defensible
+          stance for a single dramatic character.</p>
+      </details>
+    </section>
+
+    <!-- ════════ ACT III — FINDINGS ════════ -->
+    <section id="findings" class="reveal">
+      <div class="eyebrow">03 · Findings</div>
+      <h2>Commands rise as control collapses</h2>
+
+      <p>The simple hypothesis predicted that commands would <em>peak with power</em> and then
+        fade. They do not. Measured as a rate per 100 words, Lady Macbeth’s imperative use
+        climbs almost monotonically across the play — lowest when she first summons power,
+        highest at the very moment her mind gives way. Select a phase below to read its
+        profile.</p>
+
+      <!-- HERO: interactive phase explorer (real data) -->
+      <div class="phaseviz" id="phaseviz" role="group" aria-label="Imperative rate by dramatic phase">
+        <div class="axis-note">IMPERATIVE RATE · commands per 100 words · click a bar</div>
+        <div class="bars" id="pv-bars"></div>
+        <div class="phase-panel" id="pv-panel"></div>
+      </div>
+
+      <button class="insight" aria-expanded="false">
+        <span class="chev">＋</span>
+        <span class="insight-tag">insight</span>
+        <span class="insight-teaser">A fourteen-fold rise</span>
+        <span class="insight-body" hidden>Her command density climbs from <strong>0.35</strong>
+          per 100 words in the opening invocation to <strong>4.82</strong> in the sleepwalking
+          collapse — a <strong>~14×</strong> increase. If commands equalled power, she would be
+          most powerful when most broken. So they can’t.</span>
+      </button>
+
+      <p>The resolution is that <strong>frequency is the wrong lens — function is the right one</strong>.
+        The same grammatical form does completely different work at different points in the arc.</p>
+
+      <p>In <strong>Invocation</strong> (Act I.v), her imperatives are aimed at
+        <em>supernatural entities</em> — “come, you spirits.” These are <em>performative</em>
+        speech acts that try to <em>summon</em> power, not commands that <em>exercise</em> it
+        over another person. In <strong>Manipulation</strong> (I.v–vii), the commands turn
+        outward onto Macbeth: targeted, strategic, woven into persuasion. This is the phase
+        where directive language and real interpersonal power align most tightly — the true
+        peak of her authority, even though it is not the peak of her command <em>rate</em>.</p>
+
+      <button class="insight" aria-expanded="false">
+        <span class="chev">＋</span>
+        <span class="insight-tag">insight</span>
+        <span class="insight-teaser">Peak power ≠ peak commands</span>
+        <span class="insight-body" hidden>Her most <em>effective</em> control sits in
+          <strong>Manipulation</strong>, at a rate of just <strong>1.65</strong> — about a third
+          of the Collapse figure. Authority lives in <strong>targeting and coherence</strong>,
+          not in sheer command density.</span>
+      </button>
+
+      <p>By <strong>Execution</strong> and <strong>Displacement</strong> (the murder and the
+        banquet), the commands keep coming but change character: they become
+        <em>reactive</em> — crisis management rather than strategy. Surface-level directive
+        language persists even as her grip loosens. Then, in <strong>Collapse</strong> (V.i,
+        the sleepwalking scene), imperative density is <em>highest of all</em> and yet
+        emptiest: fragmented, repetitive, detached from any actionable context. This is not
+        control but <em>compulsion</em> — the grammar of command running on with nothing left
+        to command.</p>
+
+      <h3 class="sub">The body of the sentence breaks down</h3>
+      <p>If Collapse were really a return to power, her speech should regain its early
+        structure. It does the opposite. <strong>Speech length</strong> falls off a cliff —
+        from a mean of <strong>141.5 words</strong> per speech in Invocation to the low
+        twenties by the murder — and average <strong>clause length</strong> nearly halves,
+        from ~13.9 words in Manipulation to <strong>6.4</strong> in Collapse. The commands
+        survive; the coherence that made them powerful does not.</p>
+
+      <button class="insight" aria-expanded="false">
+        <span class="chev">＋</span>
+        <span class="insight-tag">insight</span>
+        <span class="insight-teaser">Loud, but in pieces</span>
+        <span class="insight-body" hidden>In Collapse her clauses average just
+          <strong>6.4 words</strong> — the shortest in the play — while her command rate is the
+          highest. Density up, structure down: the signature of disintegration, not authority.</span>
+      </button>
+
+      <p>The <strong>vocabulary</strong> tells the same story from another angle. Her
+        distinctive words migrate from <em>violence, control, and concealment</em> in the early
+        phases toward <em>psychological and obsessive</em> registers at the end — blood,
+        washing, sleep. Agency turns inward and becomes affliction.</p>
+
+      <figure class="reveal">
+        <div class="fig-media">
+          <img src="../images/lady-macbeth-lexical-heatmap.png"
+               alt="Heatmap of lexical-field rates (violence, control, care, psychological) across the five phases, showing early control and violence vocabulary giving way to psychological vocabulary in Collapse.">
+        </div>
+        <figcaption><b>Lexical fields across the arc.</b> Control- and violence-oriented
+          vocabulary dominates the early phases; by Collapse the distinctive words are
+          psychological and obsessive — a shift from external agency to internal compulsion.</figcaption>
+      </figure>
+
+      <p>Set against the play’s other women, Lady Macbeth is a genuine outlier.
+        <strong>Lady Macduff records no imperatives at all</strong>; her questions are sincere
+        inquiries voicing vulnerability. Lady Macbeth’s questions, by contrast, are
+        <em>rhetorical challenges</em> — instruments of dominance loaded with contempt. Her
+        control vocabulary and certainty markers sit far above the female baseline, which is
+        exactly what the “speaks like a man” reading predicts — though, as the arc shows, that
+        register is something she <em>performs and then loses</em>, not something she simply has.</p>
+
+      <button class="insight" aria-expanded="false">
+        <span class="chev">＋</span>
+        <span class="insight-tag">insight</span>
+        <span class="insight-teaser">An outlier among the play’s women</span>
+        <span class="insight-body" hidden>Lady Macduff issues <strong>zero</strong> commands and
+          asks genuine questions; Lady Macbeth commands, challenges, and asserts certainty far
+          above the female baseline. The contrast is what makes her register read as
+          transgressive.</span>
+      </button>
+
+      <figure class="reveal">
+        <div class="fig-media">
+          <img src="../images/lady-macbeth-female-radar.png"
+               alt="Radar chart comparing linguistic feature profiles of Lady Macbeth against other female characters across dominance, certainty, control-vocabulary and related axes.">
+        </div>
+        <figcaption><b>Lady Macbeth vs. the play’s other women.</b> On dominance, certainty,
+          and control-vocabulary axes she occupies a markedly different region of the space —
+          linguistically “marked” relative to conventional femininity in the text.</figcaption>
+      </figure>
+
+      <figure class="reveal">
+        <div class="fig-media">
+          <img src="../images/lady-macbeth-emotional-arc.png"
+               alt="Line chart of emotional-suppression indicators across the five dramatic phases, tracing early suppression and late breakdown.">
+        </div>
+        <figcaption><b>The emotional-suppression arc.</b> Early strategic control gives way to
+          a late surge of distress-oriented, self-referential language — the linguistic shape of
+          a mind coming apart.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ════════ SYNTHESIS ════════ -->
+    <section class="synthesis reveal">
+      <div class="eyebrow">Conclusion</div>
+      <p>Directive language <em>correlates</em> with power — but it does not <em>equal</em> it.
+        What separates command from control is <strong>function, context, and coherence</strong>.</p>
+      <p>Lady Macbeth’s trajectory runs from <strong>performative invocation</strong>, to
+        <strong>strategic interpersonal control</strong>, to <strong>reactive management</strong>,
+        and finally to <strong>compulsive, fragmented speech</strong>. Computational features
+        capture each transition with real precision — and in doing so they don’t overturn the
+        centuries of literary reading of this character; they <em>sharpen</em> it. The numbers
+        show that a single grammatical form can encode both the seizure of power and its
+        erosion, depending on where in the sentence — and the psyche — it lands. That is the
+        case for reading a play with a parser as well as with a pen.</p>
+    </section>
+
   </main>
   <!-- ▲▲▲ END OF YOUR DESIGN ▲▲▲ -->
 
@@ -55,5 +403,80 @@
   <div id="project-nav"></div>
 
   <script src="../js/header.js"></script>
+
+  <script>
+  /* ── Interactive phase explorer (real data from the analysis) ── */
+  (function(){
+    const PHASES=[
+      {id:"P1",name:"Invocation",loc:"Act I.v · the “unsex me here” soliloquy",
+        color:"var(--p1)",imp:0.35,len:141.5,clause:13.48,
+        note:"Imperatives are aimed at spirits, not people — performative summons that try to call power in, not commands that exercise it. Her longest, most structured speeches sit here."},
+      {id:"P2",name:"Manipulation",loc:"Act I.v–vii · overriding Macbeth’s hesitation",
+        color:"var(--p2)",imp:1.65,len:55.7,clause:13.92,
+        note:"Commands turn outward onto Macbeth: targeted, strategic, embedded in persuasion. This is where directive language and real interpersonal power align most tightly — the true peak of her authority."},
+      {id:"P3",name:"Execution",loc:"Act II.ii–iii · the murder",
+        color:"var(--p3)",imp:2.21,len:21.3,clause:8.04,
+        note:"Directives persist but turn reactive — crisis management rather than strategy. Speeches shorten sharply as coherence starts to give."},
+      {id:"P4",name:"Displacement",loc:"Act III.ii–iv · the banquet",
+        color:"var(--p4)",imp:2.39,len:19.9,clause:8.36,
+        note:"Authority slips further; commands now manage a scene that is collapsing around her. Surface directive language outlives the control it once carried."},
+      {id:"P5",name:"Collapse",loc:"Act V.i · the sleepwalking scene",
+        color:"var(--p5)",imp:4.82,len:27.7,clause:6.38,
+        note:"Highest command density in the play — and the emptiest. Fragmented, repetitive, detached from any actionable context: compulsion, not control. Her clauses are the shortest she ever speaks."},
+    ];
+    const bars=document.getElementById("pv-bars");
+    const panel=document.getElementById("pv-panel");
+    const maxImp=Math.max.apply(null,PHASES.map(function(p){return p.imp;}));
+
+    PHASES.forEach(function(p,i){
+      const w=document.createElement("div");
+      w.className="bar-wrap"; w.tabIndex=0; w.setAttribute("role","button");
+      w.setAttribute("aria-label",p.name+": "+p.imp+" commands per 100 words");
+      w.innerHTML='<div class="bar-val">'+p.imp.toFixed(2)+'</div>'+
+        '<div class="bar" style="height:'+(18+(p.imp/maxImp)*82)+'%;background:'+p.color+';"></div>'+
+        '<div class="bar-lab">P'+(i+1)+'<br>'+p.name+'</div>';
+      w.addEventListener("click",function(){select(i);});
+      w.addEventListener("keydown",function(e){
+        if(e.key==="Enter"||e.key===" "){e.preventDefault();select(i);}
+      });
+      bars.appendChild(w);
+    });
+
+    function select(i){
+      var kids=bars.children;
+      for(var j=0;j<kids.length;j++) kids[j].classList.toggle("sel",j===i);
+      var p=PHASES[i];
+      panel.innerHTML=
+        '<div class="pp-name">Phase '+(i+1)+' — '+p.name+'</div>'+
+        '<div class="pp-loc">'+p.loc+'</div>'+
+        '<div class="pp-stats">'+
+          '<div class="stat"><div class="n" style="color:'+p.color+'">'+p.imp.toFixed(2)+'</div><div class="l">Commands / 100w</div></div>'+
+          '<div class="stat"><div class="n">'+p.len.toFixed(1)+'</div><div class="l">Mean words / speech</div></div>'+
+          '<div class="stat"><div class="n">'+p.clause.toFixed(1)+'</div><div class="l">Mean words / clause</div></div>'+
+        '</div>'+
+        '<p class="pp-note">'+p.note+'</p>';
+    }
+    select(1); // open on Manipulation — the true peak of authority
+  })();
+
+  /* ── Insight pop-ups ── */
+  document.querySelectorAll(".insight").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var body=btn.querySelector(".insight-body");
+      var open=btn.getAttribute("aria-expanded")==="true";
+      btn.setAttribute("aria-expanded",String(!open));
+      body.hidden=open;
+      btn.querySelector(".chev").textContent=open?"＋":"−";
+    });
+  });
+
+  /* ── Scroll reveal ── */
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}
+    });
+  },{threshold:.12});
+  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
+  </script>
 </body>
 </html>
