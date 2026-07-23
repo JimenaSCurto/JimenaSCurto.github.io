@@ -7,7 +7,7 @@
     "cat": "nlp-politics",
     "catLabel": "NLP · Politics",
     "tags": "Python · spaCy · 2024",
-    "img": "images/placeholder.webp",
+    "img": "images/01-congress-cover.svg",
     "alt": "Image coming soon"
   },
   {
@@ -18,8 +18,8 @@
     "cat": "nlp-literature",
     "catLabel": "NLP · Literature",
     "tags": "R · NLP · 2023",
-    "img": "images/placeholder.webp",
-    "alt": "Image coming soon"
+    "img": "images/03-lady-macbeth-cover.svg",
+    "alt": "Ellen Terry as Lady Macbeth"
   },
   {
     "num": "06",
