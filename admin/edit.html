@@ -18,7 +18,7 @@
   <header class="admin-header">
     <div>
       <h1>Edit Projects</h1>
-      <p>Local editor for <code>data/projects.json</code>. Nothing here is saved automatically — download the file when you're done and commit it to the repo.</p>
+      <p>Local editor for <code>data/projects.json</code>. Each project maps to its own page at <code>projects/&lt;slug&gt;.html</code>. Nothing saves automatically — download the JSON (and any new page files) and commit them to the repo.</p>
     </div>
     <a class="btn-link" href="../index.html#work">← back to site</a>
   </header>
@@ -28,6 +28,7 @@
     <button id="load-file" class="btn-primary" type="button">Load projects.json…</button>
     <input type="file" id="file-input" accept="application/json" hidden>
     <button id="download-file" class="btn-primary" type="button">Download projects.json</button>
+    <button id="download-pages" class="btn-primary" type="button">Download all page files…</button>
     <span id="status" class="admin-status"></span>
   </div>
 
@@ -63,12 +64,32 @@
         <label class="span-2">Description
           <textarea data-field="desc" rows="2" placeholder="One-line description"></textarea>
         </label>
-        <label>Image path
-          <input type="text" data-field="img" placeholder="images/example.webp">
+        <label class="span-2">Page slug <span class="field-hint">→ projects/&lt;slug&gt;.html · lowercase, no spaces</span>
+          <input type="text" data-field="slug" placeholder="01-congress">
         </label>
-        <label>Image alt text
-          <input type="text" data-field="alt" placeholder="Describes the thumbnail">
-        </label>
+        <div class="admin-cover span-2">
+          <div class="cover-preview-wrap">
+            <img class="cover-preview" alt="" hidden>
+            <span class="cover-empty">no cover yet</span>
+          </div>
+          <div class="cover-controls">
+            <label class="cover-file-label">Cover image
+              <span class="field-hint">pick a file → sets the path &amp; downloads a copy to drop in /images</span>
+              <input type="file" class="cover-file" accept="image/*">
+            </label>
+            <label>Image path
+              <input type="text" data-field="img" placeholder="images/example.webp">
+            </label>
+            <label>Image alt text
+              <input type="text" data-field="alt" placeholder="Describes the cover">
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="admin-card-actions">
+        <span class="page-status"></span>
+        <a class="btn-link page-open" target="_blank" rel="noopener">open page ↗</a>
+        <button class="btn-link page-download" type="button">download page HTML</button>
       </div>
       <div class="admin-preview"></div>
     </div>

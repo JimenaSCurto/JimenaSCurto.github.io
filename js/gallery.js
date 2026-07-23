@@ -52,9 +52,15 @@ function renderGrid() {
   }
 
   filtered.forEach((project) => {
-    const card = document.createElement("div");
+    // Link the whole card to its own page when a slug exists;
+    // fall back to a plain div for projects that don't have a page yet.
+    const card = document.createElement(project.slug ? "a" : "div");
     card.className = "project-card";
-    card.tabIndex = 0;
+    if (project.slug) {
+      card.href = `projects/${encodeURIComponent(project.slug)}.html`;
+    } else {
+      card.tabIndex = 0;
+    }
 
     card.innerHTML = `
       <div class="card-thumb">

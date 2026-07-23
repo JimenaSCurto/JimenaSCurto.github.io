@@ -1,0 +1,150 @@
+/* ──────────────────────────────────────────────────────────────────
+   Shared header — the ONE place the site nav is styled.
+   Loaded by every page (index + each project page) so the header
+   stays identical no matter how independent a project page looks.
+   Palette: parchment #f6f1e8 · ink #1a1610 · gold #b8902a
+   ────────────────────────────────────────────────────────────────── */
+
+/* Minimal reset so a project page needs only this file to get the
+   header looking right, even before its own stylesheet loads. */
+.site-nav *, .site-nav *::before, .site-nav *::after,
+.project-nav *, .project-nav *::before, .project-nav *::after {
+  box-sizing: border-box;
+}
+
+.site-nav a, .project-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ─── Sticky top nav (identical across all pages) ────────────────── */
+
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #f6f1e8;
+  border-bottom: 1px solid rgba(26, 22, 16, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 56px;
+  height: 66px;
+}
+
+.site-nav .brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.site-nav .brand-mark {
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(184, 144, 42, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #b8902a;
+  letter-spacing: 0.05em;
+}
+
+.site-nav .brand-name {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 14px;
+  color: rgba(26, 22, 16, 0.55);
+  letter-spacing: 0.18em;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.site-nav .nav-links {
+  display: flex;
+  gap: 36px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #8a7a6a;
+  letter-spacing: 0.12em;
+}
+
+.site-nav .nav-links a {
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s, color 0.15s;
+  padding-bottom: 2px;
+}
+
+.site-nav .nav-links a:hover,
+.site-nav .nav-links a:focus-visible {
+  color: #1a1610;
+  border-bottom-color: #1a1610;
+}
+
+/* ─── Project prev/next bar (only on project pages) ──────────────── */
+
+.project-nav {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid rgba(26, 22, 16, 0.12);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: #8a7a6a;
+}
+
+.project-nav a,
+.project-nav .pn-empty {
+  flex: 1;
+  padding: 28px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.project-nav a:hover,
+.project-nav a:focus-visible {
+  background: rgba(184, 144, 42, 0.08);
+  color: #1a1610;
+}
+
+.project-nav .pn-next {
+  text-align: right;
+  align-items: flex-end;
+  border-left: 1px solid rgba(26, 22, 16, 0.12);
+}
+
+.project-nav .pn-dir {
+  color: #b8902a;
+  text-transform: uppercase;
+}
+
+.project-nav .pn-title {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  color: #1a1610;
+  text-transform: none;
+}
+
+.project-nav .pn-empty {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+@media (max-width: 680px) {
+  .site-nav {
+    padding: 0 20px;
+  }
+  .site-nav .nav-links {
+    gap: 18px;
+  }
+  .project-nav a,
+  .project-nav .pn-empty {
+    padding: 20px;
+  }
+}

@@ -10,22 +10,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-  <!-- ─── STICKY NAV ──────────────────────────────────────────────── -->
-  <nav class="site-nav">
-    <div class="brand">
-      <div class="brand-mark">JS</div>
-      <span class="brand-name">Jimena Sánchez Curto</span>
-    </div>
-    <div class="nav-links">
-      <a href="#work">work_</a>
-      <a href="#about">about_</a>
-      <a href="#contact">contact_</a>
-    </div>
-  </nav>
+  <!-- ─── STICKY NAV (shared header, injected by js/header.js) ─────── -->
+  <div id="site-header"></div>
 
   <!-- ─── HERO ────────────────────────────────────────────────────── -->
   <div class="hero">
@@ -123,6 +114,7 @@
     <span class="footer-right">DATA × LANGUAGE × PAINTING</span>
   </footer>
 
+  <script src="js/header.js"></script>
   <script src="js/gallery.js"></script>
 </body>
 </html>
