@@ -4,7 +4,7 @@ Static portfolio site, built as plain HTML/CSS/JS for GitHub Pages. No build
 step, no framework — open `index.html` in a browser or push to GitHub Pages
 and it works as-is.
 
-## Structure
+## Structure:
 
 ```
 .
