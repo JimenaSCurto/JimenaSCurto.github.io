@@ -29,14 +29,16 @@
           <span class="brand-name">Jimena Sánchez Curto</span>
         </a>
         <div class="nav-links">
-          <a href="${ROOT}index.html#work" data-section="work">work_</a>
-          <a href="${ROOT}index.html#about" data-section="about">about_</a>
-          <a href="${ROOT}index.html#contact" data-section="contact">contact_</a>
+          <a href="${ROOT}index.html#work" data-section="work" data-i18n="nav.work">work_</a>
+          <a href="${ROOT}index.html#about" data-section="about" data-i18n="nav.about">about_</a>
+          <a href="${ROOT}index.html#contact" data-section="contact" data-i18n="nav.contact">contact_</a>
         </div>
         <div class="nav-progress" aria-hidden="true"></div>
       </nav>
     `;
     wireNav(header.querySelector(".site-nav"));
+    // Lets js/i18n.js translate the nav it just injected.
+    document.dispatchEvent(new CustomEvent("header:rendered"));
   }
 
   // ── Nav behaviour: condense on scroll, reading-progress hairline,
@@ -85,16 +87,15 @@
   fetch(`${ROOT}data/projects.json`)
     .then((res) => res.json())
     .then((projects) => {
-      // Ideas are unpublished: they never appear in the prev/next chain.
-      const published = projects.filter((p) => p.status !== "idea");
-      const me = published.find((p) => p.slug === slug);
-      if (!me) return; // slug not in data (or an idea) — leave the bar empty
+      const me = projects.find((p) => p.slug === slug);
+      if (!me) return; // slug not in data — leave the bar empty
 
-      // Home-page projects chain with each other; issues of a series
-      // chain only with the other issues of that same series.
-      const chain = published.filter((p) => (p.series || "") === (me.series || ""));
+      // Home-page projects chain with each other; publications of a
+      // topic chain only with the other publications of that topic.
+      // A planned topic still has a page, so it stays in the chain.
+      const chain = projects.filter((p) => (p.series || "") === (me.series || ""));
       const i = chain.indexOf(me);
-      const parent = me.series && published.find((p) => p.slug === me.series);
+      const parent = me.series && projects.find((p) => p.slug === me.series);
 
       pnEl.innerHTML = `
         ${cell("prev", chain[i - 1], ROOT)}
@@ -122,7 +123,7 @@
   function upCell(series, root) {
     return `
       <a class="pn-up" href="${root}projects/${escapeAttr(series.slug)}.html">
-        <span class="pn-dir">↑ All issues</span>
+        <span class="pn-dir">↑ All of this topic</span>
         <span class="pn-title">${escapeHtml(series.title)}</span>
       </a>
     `;

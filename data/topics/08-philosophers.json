@@ -1,0 +1,97 @@
+{
+  "slug": "08-philosophers",
+  "title": "Vectorizing Philosophers",
+  "subtitle": "How the language a thinker spoke shifted under them",
+  "accent": "#6a5a8c",
+  "question": "When a philosopher says <em>substance</em>, how much of what they mean is theirs, and how much is just the century talking?",
+  "scope": [
+    "Every philosopher inherits a vocabulary and hands on a different one. The words survive — substance, reason, freedom, subject — while what they point at moves underneath, which is why reading an old argument in a modern sense is the most reliable way to misread it.",
+    "This topic measures that drift instead of asserting it. Texts are embedded in vector space, so a term can be located rather than glossed: near what, in whose work, in which century. A concept becomes a trajectory you can plot.",
+    "Three lenses, because the drift has three shapes. A concept moving across everyone. A thinker moving across a life. A century moving across its own vocabulary."
+  ],
+  "method": [
+    { "name": "Corpus assembly", "note": "Public-domain editions, aligned by work and date of composition rather than date of printing." },
+    { "name": "Diachronic embeddings", "note": "Time-sliced vector spaces, aligned so that a term's position is comparable across centuries." },
+    { "name": "Semantic drift", "note": "Measuring how far a concept travels, and which neighbours it swaps along the way." },
+    { "name": "Translation control", "note": "Comparing translations of the same source, so drift in the translator is not read as drift in the thinker." }
+  ],
+  "corpus": [
+    { "k": "Span", "v": "Ancient — 20th c." },
+    { "k": "Unit", "v": "Work · term" },
+    { "k": "Languages", "v": "grc · la · de · fr · en" },
+    { "k": "Status", "v": "Idea" }
+  ],
+  "lenses": [
+    {
+      "key": "topic",
+      "label": "By concept",
+      "kind": "facet",
+      "facet": "topic",
+      "blurb": "One concept, tracked across everyone who used it. The lens that makes the drift visible in a single line.",
+      "empty": "No concept has a published trajectory yet."
+    },
+    {
+      "key": "philosopher",
+      "label": "By philosopher",
+      "kind": "facet",
+      "facet": "philosopher",
+      "blurb": "One thinker's vocabulary across their own career — early work against late, and what they stopped saying.",
+      "empty": "No philosopher has a published profile yet."
+    },
+    {
+      "key": "era",
+      "label": "By era",
+      "kind": "facet",
+      "facet": "era",
+      "blurb": "A century read as a single speaker. What its philosophy could say, and what it had no word for yet.",
+      "empty": "No period has a published study yet."
+    }
+  ],
+  "facets": {
+    "topic": {
+      "label": "Concept",
+      "order": ["substance", "reason", "freedom", "subject", "justice", "nature", "language", "time"],
+      "values": {
+        "substance": { "label": "Substance", "full": "οὐσία · substantia" },
+        "reason":    { "label": "Reason",    "full": "λόγος · ratio · Vernunft" },
+        "freedom":   { "label": "Freedom",   "full": "ἐλευθερία · libertas · Freiheit" },
+        "subject":   { "label": "The subject", "full": "subiectum · Subjekt" },
+        "justice":   { "label": "Justice",   "full": "δικαιοσύνη · iustitia" },
+        "nature":    { "label": "Nature",    "full": "φύσις · natura" },
+        "language":  { "label": "Language",  "full": "Sprache · langage" },
+        "time":      { "label": "Time",      "full": "χρόνος · tempus · Zeit" }
+      }
+    },
+    "philosopher": {
+      "label": "Philosopher",
+      "order": ["plato", "aristotle", "aquinas", "descartes", "spinoza", "hume", "kant", "hegel", "nietzsche", "wittgenstein", "arendt", "rawls"],
+      "values": {
+        "plato":        { "label": "Plato",        "full": "c.428–348 BCE" },
+        "aristotle":    { "label": "Aristotle",    "full": "384–322 BCE" },
+        "aquinas":      { "label": "Aquinas",      "full": "1225–1274" },
+        "descartes":    { "label": "Descartes",    "full": "1596–1650" },
+        "spinoza":      { "label": "Spinoza",      "full": "1632–1677" },
+        "hume":         { "label": "Hume",         "full": "1711–1776" },
+        "kant":         { "label": "Kant",         "full": "1724–1804" },
+        "hegel":        { "label": "Hegel",        "full": "1770–1831" },
+        "nietzsche":    { "label": "Nietzsche",    "full": "1844–1900" },
+        "wittgenstein": { "label": "Wittgenstein", "full": "1889–1951" },
+        "arendt":       { "label": "Arendt",       "full": "1906–1975" },
+        "rawls":        { "label": "Rawls",        "full": "1921–2002" }
+      }
+    },
+    "era": {
+      "label": "Period",
+      "order": ["ancient", "medieval", "early-modern", "enlightenment", "nineteenth", "twentieth"],
+      "values": {
+        "ancient":       { "label": "Ancient",       "full": "to 500 CE",   "color": "#8c7a5a" },
+        "medieval":      { "label": "Medieval",      "full": "500–1400",    "color": "#6a5a3e" },
+        "early-modern":  { "label": "Early modern",  "full": "1400–1700",   "color": "#6a5a8c" },
+        "enlightenment": { "label": "Enlightenment", "full": "1700–1800",   "color": "#7d6ba6" },
+        "nineteenth":    { "label": "Nineteenth c.", "full": "1800–1900",   "color": "#5a4a7a" },
+        "twentieth":     { "label": "Twentieth c.",  "full": "1900–2000",   "color": "#4a4a6b" }
+      }
+    }
+  },
+  "publications": []
+}

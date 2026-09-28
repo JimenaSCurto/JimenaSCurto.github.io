@@ -49,17 +49,17 @@
           <select data-field="status">
             <option value="completed">completed</option>
             <option value="in-progress">work in progress</option>
-            <option value="idea">idea (unpublished)</option>
+            <option value="idea">planned (idea)</option>
           </select>
         </label>
         <label>Type
           <select data-field="type">
             <option value="article">standalone article</option>
-            <option value="series">recurring publication (series)</option>
+            <option value="series">topic (recurrent publication)</option>
           </select>
         </label>
         <label>Part of series <span class="field-hint">series slug · blank = shown on home page</span>
-          <input type="text" data-field="series" placeholder="(standalone)">
+          <input type="text" data-field="series" placeholder="(none — top level)" title="Leave blank for a top-level project. To file this as a publication of a topic, type that topic's slug.">
         </label>
         <label>Category key
           <select data-field="cat">

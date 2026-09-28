@@ -3,36 +3,46 @@
    and wires up the category filter buttons.
 
    Status axis (projects.json → "status"):
-     · completed    → shown, "solving" orb
-     · in-progress  → shown, "connecting" orb
-     · idea         → never published: dropped here, the moment the
-                      JSON loads, and skipped by the prev/next bar too.
-   A project with no status counts as completed.
+     · completed    → "solving" orb
+     · in-progress  → "connecting" orb
+     · idea         → "breathing" orb, shown as PLANNED
+   A project with no status counts as completed. Status is a label,
+   not a gate: what decides whether a card is a link is whether its
+   page exists. A project with no page reads "forthcoming" and stays
+   inert, so a planned topic can be on the page from the day it is an
+   idea without anything leading to a 404.
 
    Type axis (projects.json → "type" + "series"):
-     · article  → a standalone article; its card opens its own page
-     · series   → a recurring publication; its card opens the series
-                  page, which lists its issues (js/series.js)
-     · an article whose "series" names a series slug is an ISSUE of
-       that series: it never appears on the home page, only on the
-       series page.
+     · article  → a STANDALONE ARTICLE. One publication, one page.
+                  Square card.
+     · series   → a TOPIC (recurrent publication): a bank of
+                  publications, each worth its own page. Its card
+                  opens the topic page, which is driven by
+                  data/topics/<slug>.json (js/topic.js). Wide card.
+     · a project whose "series" names a topic slug is a PUBLICATION of
+       that topic. It never appears on the home page.
+
+   ("series" is the historical key for what the site now calls a
+   topic. The data keeps the old name so the admin and every saved
+   projects.json keep working; only the wording changed.)
 
    Resilient to half-finished entries in projects.json:
      · a missing/broken cover image  → a typographic cover (never a "?")
      · a slug whose page isn't built → card shows "forthcoming", no dead link
    ────────────────────────────────────────────────────────────────── */
 
-const CATEGORIES = [
-  { key: "all", label: "All Works" },
-  { key: "nlp-politics", label: "NLP · Politics" },
-  { key: "nlp-literature", label: "NLP · Literature" },
-  { key: "data-viz", label: "Data Viz" },
-];
+// The filter row is built from the categories actually present in
+// projects.json, so adding a category is a data change, not a code
+// change. This only fixes the order they appear in.
+const CATEGORY_ORDER = ["nlp-politics", "nlp-literature", "nlp-art", "simulation", "data-viz"];
+const ALL_WORKS = { key: "all", label: "All Works" };
+let categories = [ALL_WORKS];
 
 // Orb states come from thinking-orbs (see js/orbs.js).
 const STATUSES = {
   "completed":   { label: "Completed",   orb: "solving",    color: "#c9a45c" },
   "in-progress": { label: "In progress", orb: "connecting", color: "" },
+  "idea":        { label: "Planned",     orb: "breathing",  color: "#9d9384" },
 };
 
 let allProjects = [];   // every published project, issues included
@@ -49,7 +59,7 @@ const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function renderFilterRow() {
   filterRowEl.innerHTML = '<span class="filter-indicator" aria-hidden="true"></span>';
-  CATEGORIES.forEach((cat) => {
+  categories.forEach((cat) => {
     const btn = document.createElement("button");
     btn.className = "filter-btn" + (cat.key === activeFilter ? " active" : "");
     btn.textContent = cat.label;
@@ -73,13 +83,17 @@ function renderFilterRow() {
   legend.className = "status-legend";
   legend.setAttribute("role", "group");
   legend.setAttribute("aria-label", "Filter by status");
-  Object.entries(STATUSES).forEach(([key, s]) => {
+  Object.keys(STATUSES).forEach((key) => {
     const b = document.createElement("button");
     b.type = "button";
     b.className = "status-key";
     b.dataset.status = key;
-    b.setAttribute("aria-pressed", "false");
-    b.innerHTML = `${orbTag(s, 20)}<span>${s.label}</span>`;
+    // Rebuilt on a language change too, so it has to reflect the filter
+    // that is already on rather than assuming a fresh page.
+    const on = key === activeStatus;
+    b.setAttribute("aria-pressed", String(on));
+    b.classList.toggle("is-dim", !!activeStatus && !on);
+    b.innerHTML = `${orbTag(key, 20)}<span>${statusLabel(key)}</span>`;
     b.addEventListener("click", () => {
       activeStatus = activeStatus === key ? null : key;
       legend.querySelectorAll(".status-key").forEach((k) => {
@@ -106,9 +120,14 @@ function transitionGrid() {
   }
 }
 
-function orbTag(s, size) {
+function statusLabel(key) {
+  return galleryText("gallery.status." + key, STATUSES[key].label);
+}
+
+function orbTag(key, size) {
+  const s = STATUSES[key];
   const color = s.color ? ` color="${s.color}"` : "";
-  return `<thinking-orb state="${s.orb}" size="${size}"${color} label="${s.label}" aria-hidden="true"></thinking-orb>`;
+  return `<thinking-orb state="${s.orb}" size="${size}"${color} label="${statusLabel(key)}" aria-hidden="true"></thinking-orb>`;
 }
 
 function statusOf(project) {
@@ -135,7 +154,10 @@ function renderGrid(animateIn = true) {
   const articles = filtered.filter((p) => p.type !== "series");
   const series = filtered.filter((p) => p.type === "series");
 
-  countEl.textContent = `${filtered.length} project${filtered.length !== 1 ? "s" : ""}`;
+  countEl.textContent = filtered.length + " " + galleryText(
+    filtered.length === 1 ? "gallery.project" : "gallery.projects",
+    filtered.length === 1 ? "project" : "projects"
+  );
   fillGroup(gridEl, articles, animateIn, filtered.length === 0);
   fillGroup(seriesGridEl, series, animateIn, false);
 
@@ -152,7 +174,7 @@ function fillGroup(el, projects, animateIn, showEmpty) {
   if (showEmpty) {
     const empty = document.createElement("div");
     empty.className = "gallery-empty";
-    empty.textContent = "No projects here yet.";
+    empty.textContent = galleryText("gallery.empty", "No projects here yet.");
     el.appendChild(empty);
     return;
   }
@@ -161,7 +183,6 @@ function fillGroup(el, projects, animateIn, showEmpty) {
 
 function buildCard(project, i, animateIn) {
   const status = statusOf(project);
-  const st = STATUSES[status];
   const isSeries = project.type === "series";
   // Every card starts as a plain block; it becomes a link only once
   // we know its page exists, so nobody ever lands on a 404.
@@ -175,12 +196,21 @@ function buildCard(project, i, animateIn) {
 
   let seriesMeta = "";
   if (isSeries) {
-    const issues = allProjects.filter((p) => p.series && p.series === project.slug);
-    const latest = issues[issues.length - 1];
+    const meta = topicMeta.get(project.slug);
+    // Until the manifest has loaded, fall back to any publications
+    // declared in projects.json itself.
+    const count = meta ? meta.count
+      : allProjects.filter((p) => p.series === project.slug && p.status !== "idea").length;
+    const latest = meta ? meta.latest : null;
     seriesMeta = `
       <div class="series-meta">
-        <span><b>${String(issues.length).padStart(2, "0")}</b> issue${issues.length !== 1 ? "s" : ""}</span>
-        ${latest ? `<span class="series-latest">Latest — <em>${escapeHtml(latest.title)}</em></span>` : `<span class="series-latest">First issue forthcoming</span>`}
+        <span>
+          <b>${String(count).padStart(2, "0")}</b> publication${count !== 1 ? "s" : ""}${
+            meta && meta.lenses ? ` · <b>${meta.lenses}</b> ways in` : ""}
+        </span>
+        ${latest
+          ? `<span class="series-latest">Latest — <em>${escapeHtml(latest.title)}</em></span>`
+          : `<span class="series-latest">Scope and index are live; the first publication is forthcoming</span>`}
       </div>`;
   }
 
@@ -189,16 +219,16 @@ function buildCard(project, i, animateIn) {
       <div class="card-thumb-fade"></div>
       <div class="card-cat-pill">${escapeHtml(project.catLabel)}</div>
     </div>
-    <div class="card-seal" title="${st.label}">${orbTag(st, 64)}</div>
+    <div class="card-seal" title="${statusLabel(status)}">${orbTag(status, 64)}</div>
     <div class="card-body">
-      ${isSeries ? `<div class="card-kicker">Recurring publication</div>` : ""}
-      <div class="card-num">${escapeHtml(project.num)}<span class="card-status">${st.label}</span></div>
+      <div class="card-kicker">${isSeries ? "Topic · recurrent publication" : "Standalone article"}</div>
+      <div class="card-num">${escapeHtml(project.num)}<span class="card-status">${statusLabel(status)}</span></div>
       <div class="card-title">${escapeHtml(project.title)}</div>
       <div class="card-desc">${escapeHtml(project.desc)}</div>
       ${seriesMeta}
       <div class="card-footer">
         <span class="card-tags">${escapeHtml(project.tags)}</span>
-        <span class="card-view">${isSeries ? "open the series" : "view"} <span class="arrow">→</span></span>
+        <span class="card-view">${isSeries ? "enter the topic" : "read"} <span class="arrow">→</span></span>
       </div>
     </div>
   `;
@@ -253,7 +283,7 @@ function checkPage(slug) {
 function linkIfPageExists(card, project) {
   const markSoon = () => {
     card.classList.add("is-soon");
-    card.querySelector(".card-view").textContent = "forthcoming";
+    card.querySelector(".card-view").textContent = galleryText("gallery.forthcoming", "forthcoming");
   };
   if (!project.slug) return markSoon();
 
@@ -301,18 +331,76 @@ function escapeHtml(str) {
 async function init() {
   try {
     const res = await fetch("data/projects.json");
-    // Ideas are kept in the JSON but never published.
-    allProjects = (await res.json()).filter((p) => p.status !== "idea");
-    // Issues of a series live on the series page, not here.
+    allProjects = await res.json();
+    // Publications of a topic live on the topic page, not here.
     topLevel = allProjects.filter((p) => !p.series);
   } catch (err) {
     console.error("Failed to load projects.json", err);
     allProjects = [];
+    topLevel = [];
   }
-  const edCount = document.getElementById("ed-count");
-  if (edCount) edCount.textContent = `${topLevel.length} works`;
+  categories = buildCategories(topLevel);
+  setEditionCount();
   renderFilterRow();
   renderGrid();
+  // Topic cards show how many publications the topic holds; that count
+  // lives in the topic's own manifest, so fetch those and fill it in
+  // afterwards rather than blocking the grid on them.
+  loadTopicCounts();
+}
+
+// Only offer a filter for categories that actually have work in them.
+function buildCategories(projects) {
+  const seen = new Map();
+  projects.forEach((p) => {
+    if (p.cat && !seen.has(p.cat)) seen.set(p.cat, p.catLabel || p.cat);
+  });
+  const known = CATEGORY_ORDER.filter((k) => seen.has(k));
+  const rest = [...seen.keys()].filter((k) => !CATEGORY_ORDER.includes(k));
+  return [ALL_WORKS, ...[...known, ...rest].map((k) => ({ key: k, label: seen.get(k) }))];
+}
+
+// slug → { count, latest } from data/topics/<slug>.json.
+const topicMeta = new Map();
+function loadTopicCounts() {
+  const topics = topLevel.filter((p) => p.type === "series" && p.slug);
+  return Promise.all(topics.map((t) =>
+    fetch(`data/topics/${encodeURIComponent(t.slug)}.json`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((m) => {
+        if (!m) return;
+        const pubs = (m.publications || []).filter((p) => p.status !== "idea");
+        topicMeta.set(t.slug, {
+          count: pubs.length,
+          latest: pubs[pubs.length - 1] || null,
+          lenses: (m.lenses || []).length,
+        });
+      })
+      .catch(() => {})
+  )).then(() => {
+    if (topicMeta.size) renderGrid(false);
+  });
+}
+
+// Category labels come from projects.json and stay as written there;
+// only the strings this file generates itself are translated.
+// Named in full on purpose: this file shares the global scope with the
+// vendored orbs engine, which leaks a one-letter `t` of its own.
+function galleryText(key, fallback) {
+  return window.i18n ? window.i18n.t(key, fallback) : fallback;
+}
+
+function setEditionCount() {
+  const edCount = document.getElementById("ed-count");
+  if (edCount) edCount.textContent = topLevel.length + " " + galleryText("gallery.works", "works");
 }
 
 document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("i18n:changed", () => {
+  if (!topLevel.length) return;
+  setEditionCount();
+  // The status legend is built once at init, so it needs rebuilding too —
+  // otherwise the cards translate and the legend above them does not.
+  renderFilterRow();
+  renderGrid(false);
+});

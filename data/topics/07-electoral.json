@@ -1,0 +1,73 @@
+{
+  "slug": "07-electoral",
+  "title": "Electoral Analysis",
+  "subtitle": "A standing observatory of the Spanish vote",
+  "accent": "#3d6b8c",
+  "question": "What does an electorate do between elections, and how much of it shows up on the night?",
+  "scope": [
+    "Elections are covered as events and analysed as events, which is the one frame that guarantees you miss the movement. The interesting part happens in the eighteen months nobody is filming.",
+    "This topic is built as an observatory rather than a series of post-mortems: short tracking notes written while something is still moving, one-off insights when a number is worth isolating, and full analyses of past elections once the result can be read against what preceded it.",
+    "Scope is by country. For now — and for the foreseeable future — that country is Spain, where the data is good, the calendar is busy, and the party system rewards being read carefully."
+  ],
+  "method": [
+    { "name": "Survey aggregation", "note": "Published polling pooled with house effects and field dates handled explicitly rather than averaged away." },
+    { "name": "Time-series forecasting", "note": "Classical series work combined with recurrent nets, as used for decision-makers rather than for headlines." },
+    { "name": "Vote transfer", "note": "Estimating where a bloc's vote went, not only that it shrank." },
+    { "name": "Territorial breakdown", "note": "Province and municipality level, because national aggregates hide the seat arithmetic." }
+  ],
+  "corpus": [
+    { "k": "Scope", "v": "Spain" },
+    { "k": "Levels", "v": "General · autonómicas · europeas" },
+    { "k": "Cadence", "v": "Rolling" },
+    { "k": "Status", "v": "Idea" }
+  ],
+  "lenses": [
+    {
+      "key": "notes",
+      "label": "Notes & tracking",
+      "kind": "kind",
+      "match": "note",
+      "blurb": "Short-form, written while the thing is still moving — a tracking update or a single number worth isolating. Cross-posted as Substack notes.",
+      "empty": "The first note is unwritten. Essays in the meantime live on Substack.",
+      "link": { "label": "Read the Substack", "href": "https://jimenascurto.substack.com" }
+    },
+    {
+      "key": "elections",
+      "label": "Past elections",
+      "kind": "facet",
+      "facet": "election",
+      "blurb": "Full analyses, written after the fact, when a result can finally be read against everything that preceded it.",
+      "empty": "No election has a published analysis yet."
+    },
+    {
+      "key": "country",
+      "label": "By country",
+      "kind": "facet",
+      "facet": "country",
+      "blurb": "The observatory is scoped by country. One is live; the model is built so a second costs a data source, not a rewrite.",
+      "empty": "No country has a published analysis yet."
+    }
+  ],
+  "facets": {
+    "country": {
+      "label": "Country",
+      "order": ["es"],
+      "values": {
+        "es": { "label": "Spain", "full": "España · live", "color": "#c60b1e" }
+      }
+    },
+    "election": {
+      "label": "Election",
+      "order": ["gen-2023", "eu-2024", "gen-2019-nov", "gen-2019-apr", "gen-2016", "gen-2015"],
+      "values": {
+        "gen-2023":     { "label": "Generales 2023", "full": "23 July 2023",    "color": "#3d6b8c" },
+        "eu-2024":      { "label": "Europeas 2024",  "full": "9 June 2024",     "color": "#2f5f7a" },
+        "gen-2019-nov": { "label": "Generales 2019", "full": "10 November 2019","color": "#4a7a99" },
+        "gen-2019-apr": { "label": "Generales 2019", "full": "28 April 2019",   "color": "#5a88a6" },
+        "gen-2016":     { "label": "Generales 2016", "full": "26 June 2016",    "color": "#6b95b0" },
+        "gen-2015":     { "label": "Generales 2015", "full": "20 December 2015","color": "#7da3bb" }
+      }
+    }
+  },
+  "publications": []
+}

@@ -6,14 +6,14 @@
    against it for low visual strain: no pure white, warm bone text,
    a slightly brightened gold that keeps AA contrast on the dark.
 
-   Future: when the hero rotates paintings, set --edge per painting
-   (on :root) — body and every fade animate to it over 1.2s.
+   js/paintings.js sets --edge per painting as the hero rotates, so
+   body and every fade animate to the new canvas over 1.2s.
 
    Type: Cormorant Garamond (display, italic) + JetBrains Mono (labels)
    ────────────────────────────────────────────────────────────────── */
 
 :root {
-  --edge: #131315;                      /* hero painting edge */
+  --edge: #131315;                      /* hero painting edge — js/paintings.js overrides per plate */
   --surface: #1a1a1d;                   /* cards, raised panels */
   --surface-2: #212125;
   --text: #ece5d6;                      /* headlines */
@@ -43,6 +43,7 @@
 
 html {
   background: var(--edge);
+  transition: background-color 1.2s var(--ease);
   scroll-padding-top: 72px;
   -webkit-text-size-adjust: 100%;
 }
@@ -229,6 +230,43 @@ main, .site-footer { position: relative; z-index: 1; }
   color: var(--text-2);
 }
 
+/* English / Spanish, sitting where the strapline used to */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lang-switch button {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 2px 3px;
+  font: inherit;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: color 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+
+.lang-switch button:hover { color: var(--text-2); }
+
+.lang-switch button.is-on {
+  color: var(--gold);
+  border-bottom-color: var(--gold-dim);
+}
+
+.lang-switch button:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.lang-switch .ls-sep { color: var(--line-strong); }
+
 .live-dot {
   display: inline-block;
   width: 6px;
@@ -264,20 +302,6 @@ main, .site-footer { position: relative; z-index: 1; }
   background: var(--edge);
 }
 
-.frame-canvas img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  transform: scale(1.03);
-  transition: transform 1.6s var(--ease);
-}
-
-.frame-outer:hover .frame-canvas img {
-  transform: scale(1.06);
-}
-
 .frame-vignette {
   position: absolute;
   inset: 0;
@@ -296,6 +320,39 @@ main, .site-footer { position: relative; z-index: 1; }
   pointer-events: none;
 }
 
+/* Plates crossfade inside the canvas; one sweep of the scanner per
+   painting (see js/paintings.js). */
+.plate-stack {
+  position: absolute;
+  inset: 0;
+}
+
+.plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 1.2s var(--ease), transform 1.6s var(--ease);
+}
+
+.plate.is-on { opacity: 1; }
+
+.frame-outer:hover .plate.is-on { transform: scale(1.06); }
+
+.frame-note {
+  margin: 8px 0 0;
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--text-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .scan-line {
   position: absolute;
   left: 0;
@@ -309,7 +366,7 @@ main, .site-footer { position: relative; z-index: 1; }
     transparent 100%
   );
   box-shadow: 0 0 14px 1px rgba(201, 164, 92, 0.25);
-  animation: scanDown 6s linear infinite;
+  animation: scanDown 12s linear infinite;
   pointer-events: none;
 }
 
@@ -833,6 +890,10 @@ a:focus-visible .arrow {
   font-variant-numeric: tabular-nums;
 }
 
+/* Two card shapes, because the two project types behave differently:
+   a standalone article is one finished thing (square), a topic is a
+   bank you enter and explore (wide). The shape is the first signal
+   the reader gets about which is which. */
 .series-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -844,6 +905,23 @@ a:focus-visible .arrow {
   grid-template-columns: repeat(3, 1fr);
   gap: 26px;
 }
+
+.project-card:not(.is-series) {
+  aspect-ratio: 1 / 1;
+}
+
+/* In a square, the plate takes the top third and the text fills the
+   rest; the description is clamped so every square ends level. */
+.project-card:not(.is-series) .card-thumb { height: 38%; min-height: 0; }
+.project-card:not(.is-series) .card-body { flex: 1; min-height: 0; padding-top: 18px; }
+.project-card:not(.is-series) .card-title { font-size: 23px; }
+.project-card:not(.is-series) .card-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.project-card:not(.is-series) .card-seal { top: auto; bottom: 62%; }
 
 .project-card {
   --mx: 50%;
@@ -1072,6 +1150,9 @@ a:focus-visible .arrow {
 }
 
 .status-completed .card-status { color: var(--gold-dim); }
+.status-idea .card-status { color: var(--text-3); }
+/* A planned topic is present but clearly not yet underway. */
+.status-idea .card-kicker { color: var(--text-3); }
 
 .card-body {
   display: flex;
@@ -1518,6 +1599,10 @@ a:focus-visible .arrow {
   .dateline {
     margin-bottom: 36px;
     gap: 10px;
+    /* The date is long in Spanish; let the strip wrap rather than push
+       the language switch off the right edge. Items stay unbroken. */
+    flex-wrap: wrap;
+    row-gap: 4px;
   }
   .hide-sm { display: none; }
   .frame-outer { max-width: none; }

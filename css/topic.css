@@ -1,0 +1,556 @@
+/* ──────────────────────────────────────────────────────────────────
+   Topic pages — the shell every recurrent publication shares.
+
+   Same press-room vocabulary as the home page (Cormorant + JetBrains
+   Mono, section numerals, hairline rules, crop marks) but printed on
+   the parchment stock the project pages use, so a topic reads as part
+   of the same paper without pretending to be the front page.
+
+   The only thing a topic supplies is its accent: --accent, set on
+   <body data-topic> by js/topic.js from the manifest. Everything here
+   is written against that variable, so a new topic is one hex away
+   from looking like its own publication.
+   ────────────────────────────────────────────────────────────────── */
+
+:root {
+  --tp-paper: #f6f1e8;
+  --tp-paper-2: #efe8db;
+  --tp-ink: #1a1610;
+  --tp-ink-2: #4a4038;
+  --tp-muted: #8a7a6a;
+  --tp-line: rgba(26, 22, 16, 0.14);
+  --tp-line-strong: rgba(26, 22, 16, 0.3);
+  --accent: #b8902a;                       /* overridden per topic */
+  --tp-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --tp-gutter: 56px;
+  --tp-max: 1180px;
+}
+
+body.topic-page {
+  margin: 0;
+  background: var(--tp-paper);
+  color: var(--tp-ink-2);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.topic-wrap {
+  max-width: var(--tp-max);
+  margin: 0 auto;
+  padding: 0 var(--tp-gutter) 96px;
+}
+
+/* ─── Masthead ───────────────────────────────────────────────────── */
+
+.tp-masthead {
+  padding: 72px 0 0;
+}
+
+.tp-dateline {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-top: 2px solid var(--tp-ink);
+  border-bottom: 1px solid var(--tp-line);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
+.tp-dateline .tp-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.tp-dateline .tp-spacer { flex: 1; }
+
+.tp-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(42px, 6.4vw, 78px);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  color: var(--tp-ink);
+  margin: 40px 0 0;
+  max-width: 16ch;
+}
+
+.tp-subtitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(19px, 2.2vw, 25px);
+  line-height: 1.35;
+  color: var(--tp-muted);
+  margin: 14px 0 0;
+  max-width: 44ch;
+}
+
+/* The framing question, set as a standfirst with an accent rule. */
+.tp-question {
+  margin: 48px 0 0;
+  padding: 0 0 0 22px;
+  border-left: 2px solid var(--accent);
+  font-family: var(--serif);
+  font-size: clamp(22px, 2.8vw, 30px);
+  line-height: 1.32;
+  color: var(--tp-ink);
+  max-width: 30ch;
+}
+
+/* ─── Scope + method ─────────────────────────────────────────────── */
+
+.tp-brief {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 72px;
+  margin-top: 64px;
+  padding-top: 44px;
+  border-top: 1px solid var(--tp-line);
+}
+
+.tp-scope p {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.62;
+  color: var(--tp-ink-2);
+  margin: 0 0 20px;
+}
+
+.tp-scope p:first-child::first-letter {
+  float: left;
+  font-size: 68px;
+  line-height: 0.82;
+  padding: 6px 10px 0 0;
+  color: var(--accent);
+}
+
+.tp-aside-head {
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--tp-line);
+  box-shadow: 0 3px 0 -2px var(--tp-line);
+  margin-bottom: 20px;
+}
+
+.tp-method { list-style: none; margin: 0 0 40px; padding: 0; }
+
+.tp-method li {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--tp-line);
+}
+
+.tp-method b {
+  display: block;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--tp-ink);
+  margin-bottom: 5px;
+}
+
+.tp-method span {
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--tp-muted);
+}
+
+.tp-corpus {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--tp-line);
+  border: 1px solid var(--tp-line);
+}
+
+.tp-corpus div {
+  background: var(--tp-paper);
+  padding: 14px 16px;
+}
+
+.tp-corpus dt {
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+  margin-bottom: 6px;
+}
+
+.tp-corpus dd {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--tp-ink);
+}
+
+/* ─── Lens switcher ──────────────────────────────────────────────── */
+
+.tp-lenses {
+  margin-top: 88px;
+  padding-top: 26px;
+  border-top: 2px solid var(--tp-ink);
+}
+
+.tp-lens-head {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.tp-lens-head h2 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 26px;
+  color: var(--tp-ink);
+  margin: 0;
+}
+
+.tp-lens-head .tp-rule { flex: 1; height: 1px; background: var(--tp-line); }
+
+.tp-lens-head .tp-hint {
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+}
+
+.tp-lens-row {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tp-lens-btn {
+  position: relative;
+  z-index: 1;
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 11px 18px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+  cursor: pointer;
+  border-radius: 999px;
+  transition: color 0.45s var(--tp-ease);
+}
+
+.tp-lens-btn:hover { color: var(--tp-ink); }
+.tp-lens-btn.is-on { color: var(--tp-paper); }
+
+.tp-lens-btn:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The pill slides between lenses rather than blinking on. */
+.tp-lens-ink {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: transform 0.55s var(--tp-ease), width 0.55s var(--tp-ease), height 0.3s;
+  pointer-events: none;
+}
+
+.tp-lens-blurb {
+  margin: 26px 0 0;
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--tp-ink-2);
+  max-width: 62ch;
+}
+
+.tp-lens-link {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+}
+
+/* ─── Facet grid: the taxonomy as a navigable index ──────────────── */
+
+/* Hairlines are drawn by each cell, not by a background showing
+   through the gaps — otherwise a short last row leaves a grey slab
+   where the missing cells would be. */
+.tp-facets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
+  gap: 1px;
+  margin-top: 40px;
+}
+
+.tp-facet {
+  --swatch: var(--accent);
+  position: relative;
+  background: var(--tp-paper);
+  box-shadow: 0 0 0 1px var(--tp-line);
+  padding: 20px 20px 18px;
+  min-height: 132px;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.45s var(--tp-ease);
+}
+
+/* The accent bar is the only thing that carries the facet's own
+   colour — party red, palette ochre — so a wall of them still reads
+   as one page. */
+.tp-facet::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--swatch);
+  opacity: 0.85;
+  transition: width 0.45s var(--tp-ease);
+}
+
+.tp-facet:hover,
+.tp-facet:focus-within { background: var(--tp-paper-2); }
+.tp-facet:hover::before { width: 6px; }
+
+.tp-facet-label {
+  font-family: var(--serif);
+  font-size: 22px;
+  line-height: 1.16;
+  color: var(--tp-ink);
+}
+
+.tp-facet-full {
+  margin-top: 6px;
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--tp-muted);
+}
+
+.tp-facet-count {
+  margin-top: auto;
+  padding-top: 16px;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.tp-facet.has-pubs .tp-facet-count { color: var(--swatch); }
+.tp-facet.is-empty { opacity: 0.66; }
+
+/* Publications belonging to a facet, listed under it once there are any. */
+.tp-facet-pubs {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--tp-line);
+}
+
+.tp-facet-pubs li { border-bottom: 1px solid var(--tp-line); }
+
+.tp-facet-pubs a,
+.tp-facet-pubs span {
+  display: block;
+  padding: 9px 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--tp-ink-2);
+  text-decoration: none;
+}
+
+.tp-facet-pubs a:hover { color: var(--swatch); }
+.tp-facet-pubs span { color: var(--tp-muted); }
+
+/* ─── Flat publication list (the "kind" lenses) ──────────────────── */
+
+.tp-list { list-style: none; margin: 40px 0 0; padding: 0; }
+
+.tp-list li {
+  border-bottom: 1px solid var(--tp-line);
+}
+
+.tp-list li:first-child { border-top: 2px solid var(--tp-ink); }
+
+.tp-row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 24px;
+  align-items: baseline;
+  padding: 24px 0;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.35s, padding 0.6s var(--tp-ease);
+}
+
+a.tp-row:hover,
+a.tp-row:focus-visible {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.tp-row > span { min-width: 0; }
+
+.tp-row-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.tp-row-title {
+  display: block;
+  font-family: var(--serif);
+  font-size: 24px;
+  line-height: 1.22;
+  color: var(--tp-ink);
+}
+
+.tp-row-desc {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--tp-muted);
+}
+
+.tp-row-meta {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+}
+
+/* A publication's facet values, shown as tinted keys. */
+.tp-key {
+  --swatch: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border: 1px solid color-mix(in srgb, var(--swatch) 40%, transparent);
+  border-radius: 999px;
+  color: color-mix(in srgb, var(--swatch) 78%, var(--tp-ink));
+}
+
+.tp-key::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--swatch);
+}
+
+.tp-row-read {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.tp-row-read .tp-arrow {
+  display: inline-block;
+  transition: transform 0.5s var(--tp-ease);
+}
+
+a.tp-row:hover .tp-arrow { transform: translateX(4px); }
+
+li.is-soon .tp-row-read { color: var(--tp-muted); }
+
+/* ─── Empty state ────────────────────────────────────────────────── */
+
+.tp-empty {
+  margin-top: 40px;
+  padding: 44px 0;
+  border-top: 2px solid var(--tp-ink);
+  border-bottom: 1px solid var(--tp-line);
+}
+
+.tp-empty p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--tp-muted);
+  margin: 0;
+  max-width: 44ch;
+}
+
+.tp-empty .tp-empty-note {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+}
+
+/* ─── Reveal (mirrors the home page) ─────────────────────────────── */
+
+.js [data-tp-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.js [data-tp-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.9s var(--tp-ease) var(--d, 0s), transform 0.9s var(--tp-ease) var(--d, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-tp-reveal] { opacity: 1; transform: none; }
+  .tp-lens-ink { transition: none; }
+}
+
+/* ─── Narrow ─────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .tp-brief { grid-template-columns: 1fr; gap: 44px; }
+}
+
+@media (max-width: 680px) {
+  :root { --tp-gutter: 20px; }
+  .tp-masthead { padding-top: 40px; }
+  .tp-brief { margin-top: 44px; }
+  .tp-lenses { margin-top: 56px; }
+  .tp-facets { grid-template-columns: 1fr; }
+  /* Full-width cells don't need the height that kept a grid of them
+     even — it just reads as dead space on a phone. */
+  .tp-facet { min-height: 0; padding: 16px 18px 14px; }
+  .tp-facet-count { padding-top: 10px; }
+  .tp-row { grid-template-columns: 44px 1fr; gap: 16px; }
+  .tp-row-read { display: none; }
+  .tp-row-num { font-size: 26px; }
+  .tp-corpus { grid-template-columns: 1fr; }
+}

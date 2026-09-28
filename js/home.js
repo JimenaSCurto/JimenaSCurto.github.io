@@ -55,8 +55,15 @@
   const dateEl = document.getElementById("dl-date");
   const timeEl = document.getElementById("dl-time");
   const tz = "Europe/Madrid";
-  const fmtDate = new Intl.DateTimeFormat("en-GB", { timeZone: tz, weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  const fmtTime = new Intl.DateTimeFormat("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZoneName: "short" });
+  let fmtDate, fmtTime;
+  function setLocale() {
+    // The clock reads in whichever language the switch is set to.
+    const loc = window.i18n ? window.i18n.t("locale", "en-GB") : "en-GB";
+    fmtDate = new Intl.DateTimeFormat(loc, { timeZone: tz, weekday: "long", day: "numeric", month: "long", year: "numeric" });
+    fmtTime = new Intl.DateTimeFormat(loc, { timeZone: tz, hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZoneName: "short" });
+  }
+  setLocale();
+  document.addEventListener("i18n:changed", () => { setLocale(); tick(); });
   function tick() {
     const now = new Date();
     if (dateEl) dateEl.textContent = fmtDate.format(now);

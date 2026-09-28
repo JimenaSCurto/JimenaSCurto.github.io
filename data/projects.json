@@ -2,16 +2,58 @@
   {
     "num": "01",
     "status": "in-progress",
-    "type": "article",
+    "type": "series",
     "series": "",
     "slug": "01-congress",
-    "title": "Mapping the Rhetoric: The Spanish Congress through Network Analysis and NLP",
-    "desc": "Detailed analysis of Spanish parliamentary discourse and voter behaviour over time. Heavily focused on network analysis",
+    "title": "Mapping the Rhetoric",
+    "desc": "Parliamentary discourse in the Spanish Congress, read as a network: who echoes whom, how an argument is framed, and how a topic gains the floor.",
     "cat": "nlp-politics",
     "catLabel": "NLP · Politics",
-    "tags": "Python · spaCy · 2024",
+    "tags": "Python · spaCy · networkx",
     "img": "images/01-congress-cover.svg",
     "alt": "Image coming soon"
+  },
+  {
+    "num": "04",
+    "status": "idea",
+    "type": "series",
+    "series": "",
+    "slug": "04-prado",
+    "title": "A Computational Analysis of el Museo del Prado",
+    "desc": "The collection as a corpus. Five ways into eight centuries of painting — by era, by painter, by genre, by subject, and by colour.",
+    "cat": "nlp-art",
+    "catLabel": "NLP · Art",
+    "tags": "Python · computer vision · NLP",
+    "img": "images/",
+    "alt": ""
+  },
+  {
+    "num": "07",
+    "status": "idea",
+    "type": "series",
+    "series": "",
+    "slug": "07-electoral",
+    "title": "Electoral Analysis",
+    "desc": "A standing observatory of Spanish elections: short tracking notes, one-off insights, and full post-mortems of past votes.",
+    "cat": "nlp-politics",
+    "catLabel": "NLP · Politics",
+    "tags": "R · Python · survey data",
+    "img": "images/",
+    "alt": ""
+  },
+  {
+    "num": "08",
+    "status": "idea",
+    "type": "series",
+    "series": "",
+    "slug": "08-philosophers",
+    "title": "Vectorizing Philosophers",
+    "desc": "Reading the history of philosophy through its own vocabulary — how the language a thinker spoke shifted under them, and what moved with it.",
+    "cat": "nlp-literature",
+    "catLabel": "NLP · Literature",
+    "tags": "Python · embeddings · diachronic",
+    "img": "images/",
+    "alt": ""
   },
   {
     "num": "03",
@@ -24,8 +66,8 @@
     "cat": "nlp-literature",
     "catLabel": "NLP · Literature",
     "tags": "R · NLP · 2023",
-    "img": "images/03-lady-macbeth-cover.svg",
-    "alt": "Ellen Terry as Lady Macbeth"
+    "img": "images/",
+    "alt": ""
   },
   {
     "num": "06",
@@ -35,24 +77,10 @@
     "slug": "06-cartel",
     "title": "Simulations in Parallel: The case of a drug cartel",
     "desc": "From the planting to the export and selling, with probabilistic events affecting the trajectory of each run.",
-    "cat": "nlp-literature",
-    "catLabel": "NLP · Literature",
-    "tags": "Python · Gensim · 2022",
+    "cat": "simulation",
+    "catLabel": "Simulation",
+    "tags": "Python · Monte Carlo · 2022",
     "img": "images/placeholder.webp",
     "alt": "Image coming soon"
-  },
-  {
-    "num": "04",
-    "status": "in-progress",
-    "type": "article",
-    "series": "",
-    "slug": "04-prado-1",
-    "cat": "nlp-politics",
-    "catLabel": "NLP · Politics",
-    "tags": "",
-    "title": "A Computational Analysis of el Museo del Prado's Collection - Part 1",
-    "desc": "",
-    "img": "images/",
-    "alt": ""
   }
 ]

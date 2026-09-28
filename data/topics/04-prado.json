@@ -1,0 +1,136 @@
+{
+  "slug": "04-prado",
+  "title": "A Computational Analysis of el Museo del Prado",
+  "subtitle": "Eight centuries of painting, read as a corpus",
+  "accent": "#a8562f",
+  "question": "If a collection is a corpus, what does it say when you read it whole?",
+  "scope": [
+    "The Prado holds some eight thousand paintings and shows around a thousand. Everything written about it is written one canvas at a time — a catalogue entry, a monograph, a wall label. Nobody reads the collection as a body of text.",
+    "This topic does. Every work carries structured metadata (painter, date, school, genre) and unstructured metadata (its title, its catalogue description, the iconography it is indexed under), and every work is also an image with a measurable palette. Together that is enough to ask questions no single canvas can answer.",
+    "There is no single right way through a collection, so there is no single route through this topic. Five lenses cut the same corpus five ways; a publication can sit in more than one at once."
+  ],
+  "method": [
+    { "name": "Catalogue ingestion", "note": "Painter, date, school, genre and iconographic indexing, normalised into one table." },
+    { "name": "Description NLP", "note": "Entity and theme extraction over catalogue text — what a painting is said to be about." },
+    { "name": "Palette extraction", "note": "Per-canvas colour clustering in perceptual space, so palettes can be compared rather than described." },
+    { "name": "Diachronic comparison", "note": "Everything above, sliced by date, to see what changes and what refuses to." }
+  ],
+  "corpus": [
+    { "k": "Institution", "v": "Museo Nacional del Prado" },
+    { "k": "Span", "v": "12th–19th c." },
+    { "k": "Unit", "v": "One canvas" },
+    { "k": "Status", "v": "Idea" }
+  ],
+  "lenses": [
+    {
+      "key": "era",
+      "label": "By era",
+      "kind": "facet",
+      "facet": "era",
+      "blurb": "The collection cut chronologically. The most conventional route, and the one that makes the others legible.",
+      "empty": "No period has a published study yet."
+    },
+    {
+      "key": "painter",
+      "label": "By painter",
+      "kind": "facet",
+      "facet": "painter",
+      "blurb": "A single hand across a career — the closest this topic gets to a monograph, and the only lens where the unit is a person.",
+      "empty": "No painter has a published study yet."
+    },
+    {
+      "key": "genre",
+      "label": "By genre",
+      "kind": "facet",
+      "facet": "genre",
+      "blurb": "The academic hierarchy the collection was built under: history above portrait above landscape above still life. Worth testing rather than assuming.",
+      "empty": "No genre has a published study yet."
+    },
+    {
+      "key": "subject",
+      "label": "By subject",
+      "kind": "facet",
+      "facet": "subject",
+      "blurb": "What is actually depicted, taken from the catalogue's own iconographic indexing rather than from the title.",
+      "empty": "No subject has a published study yet."
+    },
+    {
+      "key": "colour",
+      "label": "By colour",
+      "kind": "facet",
+      "facet": "colour",
+      "blurb": "Palette clusters measured off the canvases themselves. The one lens the catalogue cannot give you.",
+      "empty": "No palette cluster has a published study yet."
+    }
+  ],
+  "facets": {
+    "era": {
+      "label": "Period",
+      "order": ["gothic", "renaissance", "golden-age", "baroque-late", "enlightenment", "nineteenth"],
+      "values": {
+        "gothic":        { "label": "Gothic & Early Flemish", "full": "12th–15th century", "color": "#6b5b3e" },
+        "renaissance":   { "label": "Renaissance",            "full": "15th–16th century", "color": "#8a6d3b" },
+        "golden-age":    { "label": "Spanish Golden Age",     "full": "17th century",      "color": "#a8562f" },
+        "baroque-late":  { "label": "Late Baroque",           "full": "17th–18th century", "color": "#7d3f2c" },
+        "enlightenment": { "label": "Enlightenment & Goya",   "full": "18th–19th century", "color": "#9a7b4f" },
+        "nineteenth":    { "label": "Nineteenth century",     "full": "19th century",      "color": "#5d6b73" }
+      }
+    },
+    "painter": {
+      "label": "Painter",
+      "order": ["velazquez", "goya", "el-greco", "murillo", "ribera", "zurbaran", "titian", "rubens", "bosch", "sorolla"],
+      "values": {
+        "velazquez": { "label": "Velázquez",  "full": "Diego Velázquez, 1599–1660" },
+        "goya":      { "label": "Goya",       "full": "Francisco de Goya, 1746–1828" },
+        "el-greco":  { "label": "El Greco",   "full": "Doménikos Theotokópoulos, 1541–1614" },
+        "murillo":   { "label": "Murillo",    "full": "Bartolomé Esteban Murillo, 1617–1682" },
+        "ribera":    { "label": "Ribera",     "full": "José de Ribera, 1591–1652" },
+        "zurbaran":  { "label": "Zurbarán",   "full": "Francisco de Zurbarán, 1598–1664" },
+        "titian":    { "label": "Titian",     "full": "Tiziano Vecellio, c.1488–1576" },
+        "rubens":    { "label": "Rubens",     "full": "Peter Paul Rubens, 1577–1640" },
+        "bosch":     { "label": "Bosch",      "full": "Hieronymus Bosch, c.1450–1516" },
+        "sorolla":   { "label": "Sorolla",    "full": "Joaquín Sorolla, 1863–1923" }
+      }
+    },
+    "genre": {
+      "label": "Genre",
+      "order": ["history", "religious", "mythological", "portrait", "landscape", "still-life"],
+      "values": {
+        "history":      { "label": "History painting" },
+        "religious":    { "label": "Religious" },
+        "mythological": { "label": "Mythological" },
+        "portrait":     { "label": "Portrait" },
+        "landscape":    { "label": "Landscape" },
+        "still-life":   { "label": "Still life (bodegón)" }
+      }
+    },
+    "subject": {
+      "label": "Subject",
+      "order": ["court", "war", "death", "labour", "women", "devotion", "childhood", "the-crowd"],
+      "values": {
+        "court":     { "label": "The court" },
+        "war":       { "label": "War & surrender" },
+        "death":     { "label": "Death & mourning" },
+        "labour":    { "label": "Labour" },
+        "women":     { "label": "Women depicted" },
+        "devotion":  { "label": "Devotion" },
+        "childhood": { "label": "Childhood" },
+        "the-crowd": { "label": "The crowd" }
+      }
+    },
+    "colour": {
+      "label": "Palette cluster",
+      "order": ["earth", "crimson", "gold", "ultramarine", "black", "flesh", "verdigris"],
+      "values": {
+        "earth":       { "label": "Earth & bitumen", "color": "#6b5138" },
+        "crimson":     { "label": "Crimson lake",    "color": "#8c1c2b" },
+        "gold":        { "label": "Gold & ochre",    "color": "#c08a2e" },
+        "ultramarine": { "label": "Ultramarine",     "color": "#2a4a7c" },
+        "black":       { "label": "Spanish black",   "color": "#22201e" },
+        "flesh":       { "label": "Flesh tones",     "color": "#c9a08a" },
+        "verdigris":   { "label": "Verdigris",       "color": "#4a6b56" }
+      }
+    }
+  },
+  "publications": []
+}

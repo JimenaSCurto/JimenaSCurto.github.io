@@ -203,27 +203,24 @@ document.getElementById("add-project").addEventListener("click", () => {
 });
 
 /* ── Project page (stub HTML) generation ─────────────────────────────
-   Builds the same blank-canvas page as the existing /projects/*.html
-   stubs: shared header + prev/next bar wired up by header.js, with an
-   empty <main> for you to design. */
+   Two page types, because the two project types behave differently:
+
+     article → a blank canvas. Shared header + prev/next, empty <main>.
+     topic   → the topic shell. It renders itself from
+               data/topics/<slug>.json, so the HTML stays tiny and all
+               the editing happens in that manifest (UPKEEP, TASK 9).
+
+   A topic page also needs its manifest; "Download all page files…"
+   hands you a starter one alongside the HTML. */
 function buildPageHtml(project) {
   const slug = slugFor(project);
   const title = project.title || "Untitled project";
-  const esc = (s) =>
-    String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const esc = (v) =>
+    String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const t = esc(title);
   const s = esc(slug);
-  const isSeries = project.type === "series";
-  const seriesHead = isSeries ? `
-  <!-- Series index: styles the issue list below. Keep. -->
-  <link rel="stylesheet" href="../css/series.css">` : "";
-  const seriesBody = isSeries ? `
-    <!-- The list of issues is filled in automatically from projects.json:
-         every project whose "Series" field is "${s}". Keep this div. -->
-    <div id="series-issues" style="margin-top:56px"></div>` : "";
-  const seriesScripts = isSeries ? `
-  <script type="module" src="../js/orbs.js"></script>
-  <script src="../js/series.js"></script>` : "";
+
+  if (project.type === "series") return buildTopicHtml(t, s);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -238,7 +235,7 @@ function buildPageHtml(project) {
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 
   <!-- Shared header styling — do NOT restyle .site-nav / .project-nav here. -->
-  <link rel="stylesheet" href="../css/header.css">${seriesHead}
+  <link rel="stylesheet" href="../css/header.css">
 
   <!--
     This page is a blank canvas. Design everything between #site-header
@@ -267,21 +264,88 @@ function buildPageHtml(project) {
 
   <!-- ▼▼▼ YOUR UNIQUE PROJECT DESIGN GOES HERE ▼▼▼ -->
   <main class="placeholder">
-    <div class="eyebrow">${isSeries ? "Recurring publication" : "Project"} · ${s}</div>
+    <div class="eyebrow">Project · ${s}</div>
     <h1>${t}</h1>
     <p>This page is an empty stub. Replace this &lt;main&gt; with the project
        write-up, images, and any layout you want — it can look completely
-       different from every other page.</p>${seriesBody}
+       different from every other page.</p>
   </main>
   <!-- ▲▲▲ END OF YOUR DESIGN ▲▲▲ -->
 
   <!-- Prev/next between projects — filled in by header.js -->
   <div id="project-nav"></div>
 
-  <script src="../js/header.js"></script>${seriesScripts}
+  <script src="../js/header.js"></script>
 </body>
 </html>
 `;
+}
+
+function buildTopicHtml(t, s) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>${t} — Jimena Sánchez Curto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Shared header styling — DO NOT restyle .site-nav / .project-nav here. -->
+  <link rel="stylesheet" href="../css/header.css">
+  <!-- The topic shell. Everything this page shows comes from
+       data/topics/${s}.json — see UPKEEP.md, TASK 9. -->
+  <link rel="stylesheet" href="../css/topic.css">
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body class="topic-page" data-topic="${s}">
+
+  <!-- Shared top nav — filled in by header.js -->
+  <div id="site-header"></div>
+
+  <!-- Masthead, scope, method and the lens switcher — built by topic.js.
+       To change what this page says, edit the manifest, not this file.
+       To give the topic its own look beyond its accent colour, add a
+       <style> block here or a per-topic stylesheet; css/topic.css is
+       written against .topic-page so anything here can override it. -->
+  <div id="topic"></div>
+
+  <!-- Prev/next between projects — filled in by header.js -->
+  <div id="project-nav"></div>
+
+  <script type="module" src="../js/orbs.js"></script>
+  <script src="../js/header.js"></script>
+  <script src="../js/topic.js"></script>
+</body>
+</html>
+`;
+}
+
+// A starter manifest for a new topic: one lens, no publications, so the
+// page renders the moment the file is in place.
+function buildTopicManifest(project) {
+  return JSON.stringify({
+    slug: slugFor(project),
+    title: project.title || "Untitled topic",
+    subtitle: "",
+    accent: "#b8902a",
+    question: "",
+    scope: ["What this topic is for, and why it is a topic rather than one article."],
+    method: [{ name: "Method", note: "How the work is actually done." }],
+    corpus: [{ k: "Source", v: "—" }, { k: "Unit", v: "—" }],
+    lenses: [{
+      key: "all",
+      label: "All publications",
+      kind: "kind",
+      blurb: "Everything published under this topic.",
+      empty: "The first publication is in preparation."
+    }],
+    facets: {},
+    publications: []
+  }, null, 2) + "\n";
 }
 
 function downloadBlob(filename, text, mime) {
@@ -307,6 +371,12 @@ function downloadPage(project) {
     return;
   }
   downloadBlob(`${slug}.html`, buildPageHtml(project), "text/html");
+  if (project.type === "series") {
+    // A topic page is empty without its manifest, so ship both.
+    setTimeout(() => downloadBlob(`${slug}.json`, buildTopicManifest(project), "application/json"), 120);
+    setStatus(`Downloaded ${slug}.html → projects/ and ${slug}.json → data/topics/.`);
+    return;
+  }
   setStatus(`Downloaded ${slug}.html — move it into projects/ and commit.`);
 }
 
@@ -314,7 +384,7 @@ document.getElementById("download-pages").addEventListener("click", () => {
   if (!projects.length) return;
   projects.forEach((p, i) => {
     // Stagger the downloads so the browser doesn't drop them.
-    setTimeout(() => downloadPage(p), i * 150);
+    setTimeout(() => downloadPage(p), i * 300);
   });
   setStatus(`Downloading ${projects.length} page files — move them into projects/.`);
 });

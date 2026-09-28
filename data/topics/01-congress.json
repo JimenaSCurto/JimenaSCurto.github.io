@@ -1,0 +1,77 @@
+{
+  "slug": "01-congress",
+  "title": "Mapping the Rhetoric",
+  "subtitle": "The Spanish Congress through network analysis and NLP",
+  "accent": "#b8902a",
+  "question": "When an argument wins the floor, who carried it there — and in whose words?",
+  "scope": [
+    "The Congreso de los Diputados publishes every word it says. The Diario de Sesiones is one of the longest continuous records of political speech in Spain, and almost none of it is read as a whole: debates are quoted by the sentence, never traced by the paragraph.",
+    "This topic treats the chamber as a network rather than a transcript. Speech is the edge; deputies and groups are the nodes. What travels along those edges is framing — the way a problem is named before it is argued — and framing is what this work follows from bench to bench, session to session.",
+    "Each publication takes one cut of that: a finding that holds across the whole chamber, a single deputy's vocabulary over a legislature, or a parliamentary group read against the others."
+  ],
+  "method": [
+    { "name": "Corpus construction", "note": "Diario de Sesiones, parsed to speaker-turn level with group and legislature attached." },
+    { "name": "Framing detection", "note": "Stance and frame classifiers over speaker turns — how a topic is named, not only whether it is mentioned." },
+    { "name": "Network analysis", "note": "Echo and citation graphs between deputies and groups; centrality as a measure of who sets the terms." },
+    { "name": "Topic momentum", "note": "Diachronic topic models tracking when a subject enters the chamber and how long it holds." }
+  ],
+  "corpus": [
+    { "k": "Source", "v": "Diario de Sesiones" },
+    { "k": "Unit", "v": "Speaker turn" },
+    { "k": "Language", "v": "es · ca · eu · gl" },
+    { "k": "Status", "v": "In progress" }
+  ],
+  "lenses": [
+    {
+      "key": "findings",
+      "label": "General findings",
+      "kind": "kind",
+      "match": "finding",
+      "blurb": "Results that hold across the chamber rather than for one bench. Read these first — they set the terms the other two lenses are read against.",
+      "empty": "The first chamber-wide finding is being written."
+    },
+    {
+      "key": "deputy",
+      "label": "By deputy",
+      "kind": "facet",
+      "facet": "deputy",
+      "accentFrom": "party",
+      "blurb": "One speaker, followed across a legislature. Each deputy is tinted with the colour of the group they sit with.",
+      "empty": "No deputy has a published profile yet."
+    },
+    {
+      "key": "party",
+      "label": "By party",
+      "kind": "facet",
+      "facet": "party",
+      "blurb": "A parliamentary group read against the rest of the chamber: what it names, what it never names, and whose framing it adopts.",
+      "empty": "No group has a published profile yet."
+    }
+  ],
+  "facets": {
+    "party": {
+      "label": "Parliamentary group",
+      "order": ["PSOE", "PP", "VOX", "SUMAR", "ERC", "JUNTS", "BILDU", "PNV", "BNG", "CC", "UPN", "PODEMOS"],
+      "values": {
+        "PSOE":    { "label": "PSOE",    "full": "Partido Socialista Obrero Español",       "color": "#E30613" },
+        "PP":      { "label": "PP",      "full": "Partido Popular",                         "color": "#1D84CE" },
+        "VOX":     { "label": "Vox",     "full": "Vox",                                     "color": "#63BE21" },
+        "SUMAR":   { "label": "Sumar",   "full": "Sumar",                                   "color": "#E4067E" },
+        "ERC":     { "label": "ERC",     "full": "Esquerra Republicana de Catalunya",        "color": "#FFB232" },
+        "JUNTS":   { "label": "Junts",   "full": "Junts per Catalunya",                      "color": "#00C3B2" },
+        "BILDU":   { "label": "EH Bildu","full": "Euskal Herria Bildu",                      "color": "#B5CF18" },
+        "PNV":     { "label": "PNV",     "full": "Partido Nacionalista Vasco",               "color": "#4CB847" },
+        "BNG":     { "label": "BNG",     "full": "Bloque Nacionalista Galego",               "color": "#77C4E3" },
+        "CC":      { "label": "CC",      "full": "Coalición Canaria",                        "color": "#FFD700" },
+        "UPN":     { "label": "UPN",     "full": "Unión del Pueblo Navarro",                 "color": "#0A4EA2" },
+        "PODEMOS": { "label": "Podemos", "full": "Podemos",                                  "color": "#762A83" }
+      }
+    },
+    "deputy": {
+      "label": "Deputy",
+      "order": [],
+      "values": {}
+    }
+  },
+  "publications": []
+}
