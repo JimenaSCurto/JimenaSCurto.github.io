@@ -2,8 +2,50 @@
    Shared header — the ONE place the site nav is styled.
    Loaded by every page (index + each project page) so the header
    stays identical no matter how independent a project page looks.
-   Palette: parchment #f6f1e8 · ink #1a1610 · gold #b8902a
+
+   Two editions of the same header:
+     · day   (default)  parchment #f6f1e8 · ink #1a1610 · gold #b8902a
+                         → every project page
+     · night             <html data-theme="night"> → the home page,
+                         whose background matches the hero painting.
    ────────────────────────────────────────────────────────────────── */
+
+:root {
+  --hd-bg: 246, 241, 232;            /* rgb triplet so it can be alpha'd */
+  --hd-ink: #1a1610;
+  --hd-muted: #8a7a6a;
+  --hd-soft: rgba(26, 22, 16, 0.55);
+  --hd-line: rgba(26, 22, 16, 0.1);
+  --hd-gold: #b8902a;
+  --hd-gold-line: rgba(184, 144, 42, 0.65);
+  --hd-hover: rgba(184, 144, 42, 0.08);
+  --hd-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root[data-theme="night"] {
+  --hd-bg: 19, 19, 21;
+  --hd-ink: #ece5d6;
+  --hd-muted: #9d9384;
+  --hd-soft: rgba(236, 229, 214, 0.62);
+  --hd-line: rgba(236, 229, 214, 0.09);
+  --hd-gold: #c9a45c;
+  --hd-gold-line: rgba(201, 164, 92, 0.6);
+  --hd-hover: rgba(201, 164, 92, 0.08);
+}
+
+/* Smooth cross-page transitions (Chrome/Edge/Safari 18+; ignored elsewhere). */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
 
 /* Minimal reset so a project page needs only this file to get the
    header looking right, even before its own stylesheet loads. */
@@ -19,17 +61,29 @@
 
 /* ─── Sticky top nav (identical across all pages) ────────────────── */
 
-.site-nav {
+#site-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #f6f1e8;
-  border-bottom: 1px solid rgba(26, 22, 16, 0.1);
+}
+
+.site-nav {
+  position: relative;
+  background: rgba(var(--hd-bg), 0.78);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  backdrop-filter: blur(16px) saturate(1.3);
+  border-bottom: 1px solid var(--hd-line);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 56px;
   height: 66px;
+  transition: height 0.5s var(--hd-ease), background-color 0.5s var(--hd-ease);
+}
+
+.site-nav.is-condensed {
+  height: 54px;
+  background: rgba(var(--hd-bg), 0.9);
 }
 
 .site-nav .brand {
@@ -41,22 +95,30 @@
 .site-nav .brand-mark {
   width: 30px;
   height: 30px;
-  border: 1px solid rgba(184, 144, 42, 0.65);
+  border: 1px solid var(--hd-gold-line);
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: "JetBrains Mono", monospace;
   font-size: 11px;
-  color: #b8902a;
+  color: var(--hd-gold);
   letter-spacing: 0.05em;
+  transition: transform 0.6s var(--hd-ease), background-color 0.3s;
+}
+
+.site-nav .brand:hover .brand-mark,
+.site-nav .brand:focus-visible .brand-mark {
+  transform: rotate(90deg);
+  background: var(--hd-hover);
 }
 
 .site-nav .brand-name {
   font-family: "Cormorant Garamond", serif;
   font-size: 14px;
-  color: rgba(26, 22, 16, 0.55);
+  color: var(--hd-soft);
   letter-spacing: 0.18em;
-  font-weight: 300;
+  font-weight: 400;
   text-transform: uppercase;
 }
 
@@ -65,21 +127,55 @@
   gap: 36px;
   font-family: "JetBrains Mono", monospace;
   font-size: 11px;
-  color: #8a7a6a;
+  color: var(--hd-muted);
   letter-spacing: 0.12em;
 }
 
 .site-nav .nav-links a {
+  position: relative;
   cursor: pointer;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.15s, color 0.15s;
-  padding-bottom: 2px;
+  padding-bottom: 3px;
+  transition: color 0.25s;
+}
+
+/* Underline draws in from the left instead of blinking on. */
+.site-nav .nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--hd-ease);
 }
 
 .site-nav .nav-links a:hover,
-.site-nav .nav-links a:focus-visible {
-  color: #1a1610;
-  border-bottom-color: #1a1610;
+.site-nav .nav-links a:focus-visible,
+.site-nav .nav-links a.is-active {
+  color: var(--hd-ink);
+}
+
+.site-nav .nav-links a:hover::after,
+.site-nav .nav-links a:focus-visible::after,
+.site-nav .nav-links a.is-active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Reading-progress hairline along the bottom of the nav. */
+.site-nav .nav-progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(to right, transparent, var(--hd-gold) 30%, var(--hd-gold));
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+  pointer-events: none;
 }
 
 /* ─── Project prev/next bar (only on project pages) ──────────────── */
@@ -89,11 +185,11 @@
   align-items: stretch;
   justify-content: space-between;
   gap: 16px;
-  border-top: 1px solid rgba(26, 22, 16, 0.12);
+  border-top: 1px solid var(--hd-line);
   font-family: "JetBrains Mono", monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
-  color: #8a7a6a;
+  color: var(--hd-muted);
 }
 
 .project-nav a,
@@ -103,31 +199,41 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.3s, color 0.3s;
 }
 
 .project-nav a:hover,
 .project-nav a:focus-visible {
-  background: rgba(184, 144, 42, 0.08);
-  color: #1a1610;
+  background: var(--hd-hover);
+  color: var(--hd-ink);
 }
 
 .project-nav .pn-next {
   text-align: right;
   align-items: flex-end;
-  border-left: 1px solid rgba(26, 22, 16, 0.12);
+  border-left: 1px solid var(--hd-line);
+}
+
+.project-nav .pn-up {
+  text-align: center;
+  align-items: center;
+  border-left: 1px solid var(--hd-line);
 }
 
 .project-nav .pn-dir {
-  color: #b8902a;
+  color: var(--hd-gold);
   text-transform: uppercase;
+  transition: transform 0.45s var(--hd-ease);
 }
+
+.project-nav .pn-prev:hover .pn-dir { transform: translateX(-4px); }
+.project-nav .pn-next:hover .pn-dir { transform: translateX(4px); }
 
 .project-nav .pn-title {
   font-family: "Cormorant Garamond", serif;
   font-size: 18px;
   letter-spacing: 0.02em;
-  color: #1a1610;
+  color: var(--hd-ink);
   text-transform: none;
 }
 
@@ -140,11 +246,21 @@
   .site-nav {
     padding: 0 20px;
   }
+  .site-nav .brand-name {
+    display: none;
+  }
   .site-nav .nav-links {
-    gap: 18px;
+    gap: 20px;
   }
   .project-nav a,
   .project-nav .pn-empty {
     padding: 20px;
+  }
+  .project-nav { flex-wrap: wrap; gap: 0; }
+  .project-nav .pn-up {
+    order: -1;
+    flex-basis: 100%;
+    border-left: 0;
+    border-bottom: 1px solid var(--hd-line);
   }
 }

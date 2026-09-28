@@ -1,6 +1,9 @@
 [
   {
     "num": "01",
+    "status": "in-progress",
+    "type": "article",
+    "series": "",
     "slug": "01-congress",
     "title": "Mapping the Rhetoric: The Spanish Congress through Network Analysis and NLP",
     "desc": "Detailed analysis of Spanish parliamentary discourse and voter behaviour over time. Heavily focused on network analysis",
@@ -12,6 +15,9 @@
   },
   {
     "num": "03",
+    "status": "completed",
+    "type": "article",
+    "series": "",
     "slug": "03-lady-macbeth",
     "title": "A Linguistic Analysis of Lady Macbeth",
     "desc": "Understanding Lady Macbeth's rejection of femininity via the changes in her speeches.",
@@ -23,6 +29,9 @@
   },
   {
     "num": "06",
+    "status": "completed",
+    "type": "article",
+    "series": "",
     "slug": "06-cartel",
     "title": "Simulations in Parallel: The case of a drug cartel",
     "desc": "From the planting to the export and selling, with probabilistic events affecting the trajectory of each run.",
@@ -31,5 +40,19 @@
     "tags": "Python · Gensim · 2022",
     "img": "images/placeholder.webp",
     "alt": "Image coming soon"
+  },
+  {
+    "num": "04",
+    "status": "in-progress",
+    "type": "article",
+    "series": "",
+    "slug": "04-prado-1",
+    "cat": "nlp-politics",
+    "catLabel": "NLP · Politics",
+    "tags": "",
+    "title": "A Computational Analysis of el Museo del Prado's Collection - Part 1",
+    "desc": "",
+    "img": "images/",
+    "alt": ""
   }
 ]

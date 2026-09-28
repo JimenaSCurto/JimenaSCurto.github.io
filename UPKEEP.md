@@ -126,6 +126,52 @@ Commit and push when done.
 
 ---
 
+## TASK 5 — Set a project's status
+
+Every project has a **Status** in the admin (field `status` in `projects.json`):
+
+| Status | On the site | Orb |
+|---|---|---|
+| `completed` | shown | *solving* (gold) |
+| `in-progress` | shown, labelled "In progress" | *connecting* |
+| `idea` | **never shown** — hidden from the gallery, the counts and the ← Prev / Next → bar | — |
+
+New projects start as `idea`, so nothing goes live by accident. When it is ready,
+switch it to `in-progress` or `completed`, download `projects.json`, replace the
+file, commit and push.
+
+> An idea's entry (and its page, if you've made one) still lives in the repo, so
+> the page file is technically reachable by anyone who guesses its exact URL.
+> If an idea must stay truly private, keep its page HTML out of `projects/`
+> until it is ready.
+
+---
+
+## TASK 6 — Standalone articles vs. recurring publications
+
+Every project has a **Type** and an optional **Part of series** in the admin
+(`type` and `series` in `projects.json`). The home page groups its cards by type:
+
+| What you're publishing | Type | Part of series | Where it appears |
+|---|---|---|---|
+| A one-off article | `article` | *(blank)* | Home page → **Standalone Articles** |
+| A recurring publication (the series itself) | `series` | *(blank)* | Home page → **Recurring Publications** |
+| One issue of that publication | `article` | the series' slug, e.g. `08-stance-monitor` | **Only** on the series page — never on the home page |
+
+**Starting a series:** add a project, set Type = *recurring publication*, and download
+its page HTML as usual. That page already contains the issue list — keep the
+`<div id="series-issues">` and the scripts at the bottom; design the rest freely.
+
+**Adding an issue:** add a project, leave Type = *standalone article*, and type the
+series' slug into **Part of series**. Download its page HTML into `projects/` as
+usual. The issue then appears automatically in the series' list (newest last,
+following the order in the admin), its ← Prev / Next → links run between the
+issues of that series only, and a middle link leads back up to the series.
+
+Status works the same for series and issues: `idea` issues are never listed.
+
+---
+
 ## Two rules that keep everything working
 
 1. **The slug in `projects.json` must exactly match the page filename.**
@@ -172,3 +218,5 @@ Give GitHub Pages a minute, then refresh the live site.
 | `admin/edit.html` | Control panel | No |
 | `js/header.js`, `css/header.css` | Shared header + nav | No |
 | `js/gallery.js` | Home-page cards | No |
+| `js/series.js`, `css/series.css` | Issue list on series pages | No |
+| `js/orbs.js` | Status orbs | No |

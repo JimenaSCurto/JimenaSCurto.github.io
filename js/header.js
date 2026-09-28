@@ -29,17 +29,52 @@
           <span class="brand-name">Jimena Sánchez Curto</span>
         </a>
         <div class="nav-links">
-          <a href="${ROOT}index.html#work">work_</a>
-          <a href="${ROOT}index.html#about">about_</a>
-          <a href="${ROOT}index.html#contact">contact_</a>
+          <a href="${ROOT}index.html#work" data-section="work">work_</a>
+          <a href="${ROOT}index.html#about" data-section="about">about_</a>
+          <a href="${ROOT}index.html#contact" data-section="contact">contact_</a>
         </div>
+        <div class="nav-progress" aria-hidden="true"></div>
       </nav>
     `;
+    wireNav(header.querySelector(".site-nav"));
+  }
+
+  // ── Nav behaviour: condense on scroll, reading-progress hairline,
+  //    and (on the home page) highlight the section in view. ─────────
+  function wireNav(nav) {
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const y = scrollY;
+      nav.classList.toggle("is-condensed", y > 24);
+      nav.style.setProperty("--progress", max > 0 ? Math.min(1, y / max).toFixed(4) : 0);
+    }
+    addEventListener("scroll", () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    addEventListener("resize", update, { passive: true });
+    update();
+
+    if (inProjects || !("IntersectionObserver" in window)) return;
+    const links = nav.querySelectorAll("[data-section]");
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        links.forEach((a) => a.classList.toggle("is-active", a.dataset.section === e.target.id));
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    // Sections are in the static HTML, so they exist by the time we run.
+    links.forEach((a) => {
+      const s = document.getElementById(a.dataset.section);
+      if (s) spy.observe(s);
+    });
   }
 
   // ── Prev/next bar (project pages only) ─────────────────────────────
   const pnEl = document.getElementById("project-nav");
   if (!pnEl) return;
+  pnEl.classList.add("project-nav"); // styled by css/header.css
 
   // Current slug = filename without extension, e.g. "01-congress".
   const slug = location.pathname
@@ -50,14 +85,21 @@
   fetch(`${ROOT}data/projects.json`)
     .then((res) => res.json())
     .then((projects) => {
-      const i = projects.findIndex((p) => p.slug === slug);
-      if (i === -1) return; // slug not in data — leave the bar empty
-      const prev = projects[i - 1];
-      const next = projects[i + 1];
+      // Ideas are unpublished: they never appear in the prev/next chain.
+      const published = projects.filter((p) => p.status !== "idea");
+      const me = published.find((p) => p.slug === slug);
+      if (!me) return; // slug not in data (or an idea) — leave the bar empty
+
+      // Home-page projects chain with each other; issues of a series
+      // chain only with the other issues of that same series.
+      const chain = published.filter((p) => (p.series || "") === (me.series || ""));
+      const i = chain.indexOf(me);
+      const parent = me.series && published.find((p) => p.slug === me.series);
 
       pnEl.innerHTML = `
-        ${cell("prev", prev, ROOT)}
-        ${cell("next", next, ROOT)}
+        ${cell("prev", chain[i - 1], ROOT)}
+        ${parent ? upCell(parent, ROOT) : ""}
+        ${cell("next", chain[i + 1], ROOT)}
       `;
     })
     .catch((err) => console.error("header.js: could not load projects.json", err));
@@ -72,6 +114,16 @@
       <a class="${cls}" href="${root}projects/${escapeAttr(project.slug)}.html">
         <span class="pn-dir">${label}</span>
         <span class="pn-title">${escapeHtml(project.title)}</span>
+      </a>
+    `;
+  }
+
+  // Middle cell on an issue page: back up to its series.
+  function upCell(series, root) {
+    return `
+      <a class="pn-up" href="${root}projects/${escapeAttr(series.slug)}.html">
+        <span class="pn-dir">↑ All issues</span>
+        <span class="pn-title">${escapeHtml(series.title)}</span>
       </a>
     `;
   }

@@ -1,120 +1,353 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="night">
 <head>
   <meta charset="utf-8">
   <title>Jimena Sánchez Curto — Data Analyst / NLP Researcher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Jimena Sánchez Curto — Data analyst and NLP researcher working at the intersection of data, politics, and the humanities.">
+  <meta name="theme-color" content="#131315">
+  <meta name="color-scheme" content="dark">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/styles.css">
+  <!-- Marks JS as available before first paint so reveal animations never flash. -->
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
+
+  <!-- Film-grain + halftone layers: the "newsprint" under everything. -->
+  <div class="grain" aria-hidden="true"></div>
 
   <!-- ─── STICKY NAV (shared header, injected by js/header.js) ─────── -->
   <div id="site-header"></div>
 
+  <main>
+
   <!-- ─── HERO ────────────────────────────────────────────────────── -->
-  <div class="hero">
+  <section class="hero" aria-label="Introduction">
+
+    <!-- Dateline — the newspaper's masthead strip, with a live clock -->
+    <div class="dateline" data-reveal>
+      <span>Vol. I</span>
+      <span class="dl-sep"></span>
+      <span>Madrid</span>
+      <span class="dl-sep"></span>
+      <span id="dl-date">—</span>
+      <span class="dl-sep hide-sm"></span>
+      <span class="hide-sm"><span class="live-dot" aria-hidden="true"></span><span id="dl-time">--:--:--</span></span>
+      <span class="dl-spacer"></span>
+      <span class="hide-sm">Data × Language × Painting</span>
+    </div>
+
     <div class="hero-inner">
 
-      <!-- LEFT — Framed painting with NLP scanner -->
-      <div class="frame-outer">
-        <div class="frame-mat">
-          <div class="frame-canvas">
-            <img src="images/hero-pearl-earring.webp" alt="Girl with a Pearl Earring — Vermeer, c.1665">
-            <div class="frame-vignette"></div>
-            <div class="frame-bottom-fade"></div>
+      <!-- LEFT — Painting with NLP scanner.
+           The page background (--edge) is sampled from the painting's
+           edges so the canvas dissolves into the page. When paintings
+           rotate, set --edge per painting and the page follows. -->
+      <figure class="frame-outer" data-reveal>
+        <div class="frame-canvas">
+          <img src="images/hero-pearl-earring.webp" alt="Girl with a Pearl Earring — Vermeer, c.1665" width="676" height="799" fetchpriority="high">
+          <div class="frame-vignette"></div>
+          <div class="frame-bottom-fade"></div>
 
-            <div class="scan-line"></div>
+          <div class="scan-line"></div>
 
-            <div class="nlp-annotation annot-entity">
-              <div class="label">ENTITY</div>
-              <div class="value">subject · PERSON</div>
-              <div class="meta">conf: 0.97</div>
-            </div>
-
-            <div class="nlp-annotation annot-gaze">
-              <div class="label">GAZE_VECTOR</div>
-              <div class="value">direct · viewer</div>
-              <div class="meta">θ: 0.02 rad</div>
-            </div>
-
-            <div class="nlp-annotation annot-sentiment">
-              <div class="label">SENTIMENT</div>
-              <div class="value">neutral · longing</div>
-              <div class="bars">
-                <div class="bar" style="width:22px;background:#b8902a;"></div>
-                <div class="bar" style="width:16px;background:rgba(184,144,42,0.42);"></div>
-                <div class="bar" style="width:8px;background:rgba(92,80,64,0.35);"></div>
-              </div>
-            </div>
-
-            <div class="nlp-annotation annot-object">
-              <div class="label">OBJECT</div>
-              <div class="value">pearl earring</div>
-              <div class="meta">status_marker: 1</div>
-            </div>
-
-            <div class="painting-caption">VERMEER · C.1665 · MAURITSHUIS, DEN HAAG</div>
+          <div class="nlp-annotation annot-entity">
+            <div class="label">ENTITY</div>
+            <div class="value">subject · PERSON</div>
+            <div class="meta">conf: 0.97</div>
           </div>
+
+          <div class="nlp-annotation annot-gaze">
+            <div class="label">GAZE_VECTOR</div>
+            <div class="value">direct · viewer</div>
+            <div class="meta">θ: 0.02 rad</div>
+          </div>
+
+          <div class="nlp-annotation annot-sentiment">
+            <div class="label">SENTIMENT</div>
+            <div class="value">neutral · longing</div>
+            <div class="bars">
+              <div class="bar" style="width:22px;background:var(--gold);"></div>
+              <div class="bar" style="width:16px;background:rgba(201,164,92,0.42);"></div>
+              <div class="bar" style="width:8px;background:rgba(157,147,132,0.4);"></div>
+            </div>
+          </div>
+
+          <div class="nlp-annotation annot-object">
+            <div class="label">OBJECT</div>
+            <div class="value">pearl earring</div>
+            <div class="meta">status_marker: 1</div>
+          </div>
+
+          <div class="painting-caption">VERMEER · C.1665 · MAURITSHUIS, DEN HAAG</div>
         </div>
-        <div class="frame-label">
-          <div class="rule"></div>
+        <!-- Printer's crop marks: where the press room meets the plotter -->
+        <span class="crop tl" aria-hidden="true"></span>
+        <span class="crop tr" aria-hidden="true"></span>
+        <span class="crop bl" aria-hidden="true"></span>
+        <span class="crop br" aria-hidden="true"></span>
+        <figcaption class="frame-label">
+          <thinking-orb state="searching" size="20" color="#c9a45c" aria-hidden="true"></thinking-orb>
           <span>ALGORITHMIC GAZE · ACTIVE SCAN</span>
-        </div>
-      </div>
+        </figcaption>
+      </figure>
 
       <!-- RIGHT — Identity -->
       <div class="identity">
-        <div class="eyebrow">DATA_ANALYST / NLP_RESEARCHER</div>
-        <h1>Jimena</h1>
-        <h1 class="last">Sánchez</h1>
-        <div class="location">
+        <canvas class="embedding-field" aria-hidden="true"></canvas>
+
+        <div class="eyebrow" data-reveal>DATA_ANALYST / NLP_RESEARCHER</div>
+        <h1 class="name" data-split>
+          <span class="line">Jimena</span>
+          <span class="line">Sánchez Curto</span>
+        </h1>
+        <div class="location" data-reveal>
           <div class="rule"></div>
-          <span>MADRID</span>
+          <span>MADRID · 40.4168° N, 3.7038° W</span>
         </div>
-        <p class="tagline">
-          Leveraging statistics to understand ourselves.<br>
-          At the intersection of data, politics,<br>
+        <p class="tagline" data-reveal>
+          Leveraging statistics to understand ourselves.
+          At the intersection of data, politics,
           and the humanities — through NLP.
         </p>
-        <div class="cta-row">
-          <a href="#work" class="btn-primary">view_work()</a>
-          <a href="#about" class="btn-link">about_me →</a>
+        <div class="cta-row" data-reveal>
+          <a href="#work" class="btn-primary" data-magnetic><span>view_work()</span></a>
+          <a href="#about" class="btn-link">about_me <span class="arrow">→</span></a>
         </div>
+
+        <!-- "In this edition" — a newspaper contents box -->
+        <nav class="edition" aria-label="In this edition" data-reveal>
+          <div class="edition-head">In this edition</div>
+          <a href="#work"><span class="ed-num">§01</span><span class="ed-title">Selected Works</span><span class="ed-lead"></span><span class="ed-page" id="ed-count">—</span></a>
+          <a href="#about"><span class="ed-num">§02</span><span class="ed-title">Profile</span><span class="ed-lead"></span><span class="ed-page">p. 2</span></a>
+          <a href="#contact"><span class="ed-num">§03</span><span class="ed-title">Correspondence</span><span class="ed-lead"></span><span class="ed-page">p. 3</span></a>
+        </nav>
       </div>
 
+    </div>
+  </section>
+
+  <!-- ─── TICKER — wire-service strip ─────────────────────────────── -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>Natural Language Processing</span><i>◆</i>
+      <span>Network Analysis</span><i>◆</i>
+      <span>Stance &amp; Framing Detection</span><i>◆</i>
+      <span>Statistical Modelling</span><i>◆</i>
+      <span>Time-Series Forecasting · RNN</span><i>◆</i>
+      <span>Social Listening</span><i>◆</i>
+      <span>Machine Learning</span><i>◆</i>
+      <span>Python · R · Tableau</span><i>◆</i>
+      <span>Political &amp; Market Research</span><i>◆</i>
+      <span>Computational Humanities</span><i>◆</i>
     </div>
   </div>
 
   <!-- ─── GALLERY ─────────────────────────────────────────────────── -->
-  <div class="gallery" id="work">
-    <div class="gallery-inner">
+  <section class="section gallery" id="work">
+    <div class="section-inner">
 
-      <div class="gallery-heading">
+      <header class="section-heading" data-reveal>
+        <span class="section-num">§ 01</span>
         <h2>Selected Works</h2>
-        <span class="count" id="project-count">6 projects</span>
+        <span class="count" id="project-count">— projects</span>
+      </header>
+
+      <div class="gallery-controls">
+        <div class="filter-row" id="filter-row" role="group" aria-label="Filter projects"></div>
+        <!-- status legend is inserted here by gallery.js -->
       </div>
 
-      <div class="filter-row" id="filter-row"></div>
+      <!-- Group 1 — standalone articles -->
+      <div class="work-group">
+        <h3 class="group-head">
+          <span class="group-title">Standalone Articles</span>
+          <span class="group-rule"></span>
+          <span class="group-count"></span>
+        </h3>
+        <div class="project-grid" id="project-grid">
+          <div class="gallery-loading">
+            <thinking-orb state="working" size="32" theme="dark" label="Loading projects"></thinking-orb>
+            <span>Setting type…</span>
+          </div>
+        </div>
+      </div>
 
-      <div class="project-grid" id="project-grid"></div>
+      <!-- Group 2 — recurring publications (each opens a series page
+           that lists its issues; the issues are not shown here) -->
+      <div class="work-group" hidden>
+        <h3 class="group-head">
+          <span class="group-title">Recurring Publications</span>
+          <span class="group-rule"></span>
+          <span class="group-count"></span>
+        </h3>
+        <div class="series-grid" id="series-grid"></div>
+      </div>
 
     </div>
-  </div>
+  </section>
+
+  <!-- ─── ABOUT ───────────────────────────────────────────────────── -->
+  <section class="section about" id="about">
+    <div class="section-inner">
+
+      <header class="section-heading" data-reveal>
+        <span class="section-num">§ 02</span>
+        <h2>Profile</h2>
+        <span class="count">Madrid</span>
+      </header>
+
+      <div class="about-grid">
+
+        <article class="about-story">
+          <p class="kicker" data-reveal>The analyst as reader</p>
+          <h3 class="headline" data-split>
+            <span class="line">Reading data the way</span>
+            <span class="line">a humanist reads a text.</span>
+          </h3>
+          <p class="deck" data-reveal>
+            For structure, for subtext — and for what the numbers leave unsaid.
+          </p>
+
+          <div class="columns" data-reveal>
+            <p class="dropcap">
+              Jimena Sánchez Curto is a fifth-year dual-degree student in
+              Philosophy, Politics, Law &amp; Economics and Data &amp; Business
+              Analytics at IE University, and a Data Consultant at GAD3 in
+              Madrid, where she applies data science to political and market
+              research.
+            </p>
+            <p>
+              Her work sits where quantitative rigour meets interpretive nuance:
+              machine-learning pipelines that follow how public arguments are
+              framed and how topics gain momentum, forecasting models built for
+              decision-makers, and natural language processing that treats
+              language as evidence.
+            </p>
+            <p>
+              Educated across Europe and Latin America and bilingual in Spanish
+              and English, she brings training in philosophical, political,
+              legal and historical analysis to every model she builds —
+              choosing methods to fit the question, rather than by default.
+            </p>
+          </div>
+
+          <blockquote class="pullquote" data-reveal>
+            “Methods matched to the problem — not used by default.”
+          </blockquote>
+        </article>
+
+        <aside class="record" aria-label="Record">
+
+          <div class="record-block" data-reveal>
+            <div class="record-head">Experience</div>
+            <ol class="timeline">
+              <li>
+                <div class="tl-when">Jun 2025 — Present</div>
+                <div class="tl-what">Data Consultant · <em>GAD3</em></div>
+                <div class="tl-where">Madrid · previously Data Consultant Intern</div>
+                <ul>
+                  <li>Built a real-time industry observatory that returns decision-ready intelligence in seconds — now in company-wide use.</li>
+                  <li>Led the technical build-out of a social-listening product: an ML pipeline tracing shifts in argument framing and the momentum of public topics.</li>
+                  <li>Forecasting models combining time-series analysis with recurrent neural networks.</li>
+                  <li>Replaced manual workflows with reproducible pipelines — one weekly 2–3 hour task became a 15-minute background process.</li>
+                </ul>
+              </li>
+              <li>
+                <div class="tl-when">Aug 2024</div>
+                <div class="tl-what">Intern, Salesforce Data Cloud · <em>Hikko</em></div>
+                <div class="tl-where">Montevideo</div>
+                <ul>
+                  <li>Oversaw the data dimension of a Data Cloud implementation; documented it for future teams, built demos and presented the project to the CFO.</li>
+                </ul>
+              </li>
+            </ol>
+          </div>
+
+          <div class="record-block" data-reveal>
+            <div class="record-head">Education</div>
+            <dl class="facts">
+              <dt>IE University <span>exp. 2027</span></dt>
+              <dd>Dual bachelor’s, Philosophy, Politics, Law &amp; Economics + Data &amp; Business Analytics. Honours in Probability &amp; Statistics, and in AI &amp; Machine Learning Foundations.</dd>
+              <dt>International Baccalaureate <span>2021</span></dt>
+              <dd>International College of Punta del Este</dd>
+            </dl>
+          </div>
+
+          <div class="record-block record-split" data-reveal>
+            <div>
+              <div class="record-head">Toolkit</div>
+              <ul class="chips">
+                <li>Python</li><li>R</li><li>Tableau</li><li>NLP</li>
+                <li>Network analysis</li><li>Machine learning</li>
+                <li>Forecasting · RNN</li><li>Statistical modelling</li>
+              </ul>
+            </div>
+            <div>
+              <div class="record-head">Credentials</div>
+              <ul class="plain">
+                <li>Salesforce Certified Data Cloud Consultant <span>2024</span></li>
+                <li>Spanish &amp; English <span>bilingual</span></li>
+                <li>Open to internship agreements via IE University</li>
+              </ul>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ─────────────────────────────────────────────────── -->
+  <section class="section contact" id="contact">
+    <div class="section-inner">
+      <header class="section-heading" data-reveal>
+        <span class="section-num">§ 03</span>
+        <h2>Correspondence</h2>
+        <span class="count count-orb"><thinking-orb state="composing" size="20" aria-hidden="true"></thinking-orb>Letters welcome</span>
+      </header>
+
+      <div class="contact-body">
+        <p class="contact-lede" data-split>
+          <span class="line">Working on something where</span>
+          <span class="line">language, politics and data meet?</span>
+        </p>
+        <div class="contact-links" data-reveal>
+          <a class="contact-link" href="https://jimenascurto.substack.com" target="_blank" rel="noopener">
+            <span class="cl-label">Essays &amp; notes</span>
+            <span class="cl-value">Substack <span class="arrow">↗</span></span>
+          </a>
+          <a class="contact-link" href="https://github.com/JimenaSCurto" target="_blank" rel="noopener">
+            <span class="cl-label">Code</span>
+            <span class="cl-value">GitHub <span class="arrow">↗</span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
 
   <!-- ─── FOOTER ──────────────────────────────────────────────────── -->
-  <footer class="site-footer" id="contact">
+  <footer class="site-footer">
     <span class="footer-left">Jimena Sánchez Curto · DATA ANALYST · NLP</span>
     <span class="footer-right">DATA × LANGUAGE × PAINTING</span>
   </footer>
 
+  <!-- Inertial smooth scrolling. If the CDN is unreachable the page
+       simply scrolls natively — nothing depends on it. -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js" defer></script>
+  <!-- <thinking-orb> animations (thinking-orbs engine, vendored) -->
+  <script type="module" src="js/orbs.js"></script>
   <script src="js/header.js"></script>
   <script src="js/gallery.js"></script>
+  <script src="js/home.js" defer></script>
 </body>
 </html>

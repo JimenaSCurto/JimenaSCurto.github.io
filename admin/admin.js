@@ -5,7 +5,7 @@
    to commit back into the repo. No server, no auto-save.
    ────────────────────────────────────────────────────────────────── */
 
-const FIELD_KEYS = ["num", "cat", "catLabel", "tags", "title", "desc", "slug", "img", "alt"];
+const FIELD_KEYS = ["num", "status", "type", "series", "cat", "catLabel", "tags", "title", "desc", "slug", "img", "alt"];
 
 let projects = [];
 
@@ -48,6 +48,9 @@ function render() {
     node.dataset.index = String(index);
 
     node.querySelector(".card-index").textContent = `project ${index + 1}`;
+    // Projects saved before statuses existed count as completed.
+    if (!project.status) project.status = "completed";
+    if (!project.type) project.type = "article";
 
     FIELD_KEYS.forEach((key) => {
       const field = node.querySelector(`[data-field="${key}"]`);
@@ -183,6 +186,9 @@ document.getElementById("add-project").addEventListener("click", () => {
   const num = String(projects.length + 1).padStart(2, "0");
   projects.push({
     num,
+    status: "idea",
+    type: "article",
+    series: "",
     slug: "",
     cat: "nlp-politics",
     catLabel: "NLP · Politics",
@@ -207,6 +213,17 @@ function buildPageHtml(project) {
     String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const t = esc(title);
   const s = esc(slug);
+  const isSeries = project.type === "series";
+  const seriesHead = isSeries ? `
+  <!-- Series index: styles the issue list below. Keep. -->
+  <link rel="stylesheet" href="../css/series.css">` : "";
+  const seriesBody = isSeries ? `
+    <!-- The list of issues is filled in automatically from projects.json:
+         every project whose "Series" field is "${s}". Keep this div. -->
+    <div id="series-issues" style="margin-top:56px"></div>` : "";
+  const seriesScripts = isSeries ? `
+  <script type="module" src="../js/orbs.js"></script>
+  <script src="../js/series.js"></script>` : "";
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -221,7 +238,7 @@ function buildPageHtml(project) {
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 
   <!-- Shared header styling — do NOT restyle .site-nav / .project-nav here. -->
-  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/header.css">${seriesHead}
 
   <!--
     This page is a blank canvas. Design everything between #site-header
@@ -250,18 +267,18 @@ function buildPageHtml(project) {
 
   <!-- ▼▼▼ YOUR UNIQUE PROJECT DESIGN GOES HERE ▼▼▼ -->
   <main class="placeholder">
-    <div class="eyebrow">Project · ${s}</div>
+    <div class="eyebrow">${isSeries ? "Recurring publication" : "Project"} · ${s}</div>
     <h1>${t}</h1>
     <p>This page is an empty stub. Replace this &lt;main&gt; with the project
        write-up, images, and any layout you want — it can look completely
-       different from every other page.</p>
+       different from every other page.</p>${seriesBody}
   </main>
   <!-- ▲▲▲ END OF YOUR DESIGN ▲▲▲ -->
 
   <!-- Prev/next between projects — filled in by header.js -->
   <div id="project-nav"></div>
 
-  <script src="../js/header.js"></script>
+  <script src="../js/header.js"></script>${seriesScripts}
 </body>
 </html>
 `;
